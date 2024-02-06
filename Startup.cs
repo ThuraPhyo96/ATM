@@ -41,7 +41,7 @@ namespace ATM
             options.UseSqlServer(
             Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<ATMUserAccount, IdentityRole>(options =>
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 // Default Lockout settings.
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
@@ -93,7 +93,7 @@ namespace ATM
                 option.IterationCount = 12000;
             });
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddControllers(config =>
             {
                 // using Microsoft.AspNetCore.Mvc.Authorization;

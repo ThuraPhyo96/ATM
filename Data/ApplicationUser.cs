@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ using Microsoft.AspNetCore.Identity;
 namespace ATM.Areas.Identity.Data
 {
     // Add profile data for application users by adding properties to the ATMUserAccount class
-    public class ATMUserAccount : IdentityUser
+    public partial class ApplicationUser : IdentityUser
     {
         public int UserType { get; set; }
         public bool IsActive { get; set; }
@@ -24,16 +25,14 @@ namespace ATM.Areas.Identity.Data
         public string UpdatedUserId { get; set; }
         public DateTime? UpdatedTime { get; set; }
         #endregion
-
-        public ATMUserAccount()
-        {
-
-        }
     }
 
+    [Flags]
     public enum EUserType
     {
+        [Description("Super Admin")]
         SuperAdmin = 1,
+        [Description("Customer")]
         Customer = 2
     }
 }

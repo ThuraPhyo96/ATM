@@ -4,14 +4,16 @@ using ATM.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ATM.Migrations
 {
     [DbContext(typeof(ATMContext))]
-    partial class ATMContextModelSnapshot : ModelSnapshot
+    [Migration("20240206180543_Add_Setup_Tables")]
+    partial class Add_Setup_Tables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

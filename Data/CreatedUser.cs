@@ -11,6 +11,5 @@ namespace ATM.Data
         public string CreatedUserId { get; set; }
 
         public IdentityUser CreatedBy { get; set; }
-        public DateTime? CreationTime { get; set; }
     }
 }

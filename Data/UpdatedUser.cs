@@ -11,6 +11,5 @@ namespace ATM.Data
         public string UpdatedUserId { get; set; }
 
         public IdentityUser UpdatedBy { get; set; }
-        public DateTime? UpdatedTime { get; set; }
     }
 }
