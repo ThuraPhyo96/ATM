@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualBasic;
 using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,19 +24,22 @@ namespace ATM.AppServices.PredefinedSeedData
             // The admin user can do anything
             var superAdminID = await InitialUser(serviceProvider, userPw, "super@admin.com", (int)EUserType.SuperAdmin);
             await InitialRole(serviceProvider, superAdminID, RoleNames.SuperAdmin);
+
+            // Seed initial roles
+            await SeedRoles(serviceProvider);
         }
 
         private static async Task<string> InitialUser(IServiceProvider serviceProvider, string userPw, string UserName, int userType)
         {
-            var userManager = serviceProvider.GetService<UserManager<ATMUserAccount>>();
+            var userManager = serviceProvider.GetService<UserManager<ApplicationUser>>();
 
             var user = await userManager.FindByNameAsync(UserName);
             if (user == null)
             {
-                user = new ATMUserAccount
+                user = new ApplicationUser
                 {
                     UserName = UserName,
-                    Email = UserName,   
+                    Email = UserName,
                     IsActive = true,
                     UserType = userType,
                     EmailConfirmed = true,
@@ -65,7 +70,7 @@ namespace ATM.AppServices.PredefinedSeedData
                 IR = await roleManager.CreateAsync(new IdentityRole(role));
             }
 
-            var userManager = serviceProvider.GetService<UserManager<ATMUserAccount>>();
+            var userManager = serviceProvider.GetService<UserManager<ApplicationUser>>();
 
             var user = await userManager.FindByIdAsync(uid);
 
@@ -77,6 +82,30 @@ namespace ATM.AppServices.PredefinedSeedData
             IR = await userManager.AddToRoleAsync(user, role);
 
             return IR;
+        }
+
+        private static async Task SeedRoles(IServiceProvider serviceProvider)
+        {
+            var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
+
+            if (roleManager == null)
+            {
+                throw new Exception("roleManager null");
+            }
+
+            List<string> roleNames = new List<string>()
+            {
+                RoleNames.SuperAdmin,
+                RoleNames.Customer
+            };
+
+            foreach (var roleName in roleNames)
+            {
+                if (!await roleManager.RoleExistsAsync(roleName))
+                {
+                    await roleManager.CreateAsync(new IdentityRole(roleName));
+                }
+            }
         }
     }
 }
