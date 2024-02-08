@@ -1,0 +1,60 @@
+﻿@model ATM.AppServices.BankAccountSetup.Dtos.UpdateBalanceDto
+@{
+    Layout = null;
+    ViewData["Title"] = "Update Balance";
+}
+
+<div class="modal-header">
+    <h5 class="modal-title" id="createBankAccount">@ViewData["Title"]</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <form asp-action="UpdateBalance" asp-controller="BankAccount" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="BankAccountId" />
+        <input type="hidden" asp-for="BankAccountGuid" />
+        <div class="form-group">
+            <div class="row">
+                <div class="col-4 col-md-4 col-sm-12">
+                    <label asp-for="AccountNumber" class="control-label"></label>
+                </div>
+                <div class="col-8 col-md-8 col-sm-12">
+                    <input asp-for="AccountNumber" class="form-control" readonly />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-4 col-md-4 col-sm-12">
+                    <label asp-for="CurrentBalance" class="control-label"></label>
+                </div>
+                <div class="col-8 col-md-8 col-sm-12">
+                    <input asp-for="CurrentBalance" class="form-control" readonly />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-4 col-md-4 col-sm-12">
+                    <label asp-for="Balance" class="control-label"></label>
+                </div>
+                <div class="col-8 col-md-8 col-sm-12">
+                    <input asp-for="Balance" class="form-control" />
+                    <span asp-validation-for="Balance" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-12 col-md-12 col-sm-12 text-right">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input type="submit" value="Update" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

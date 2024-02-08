@@ -1,4 +1,5 @@
 ﻿using ATM.AppServices.Authentication.Dtos;
+using ATM.AppServices.BankAccountSetup.Dtos;
 using ATM.AppServices.CustomerSetup.Dtos;
 using ATM.Areas.Identity.Data;
 using ATM.Data;
@@ -19,6 +20,10 @@ namespace ATM.Mapping
             // Added by TR on 08-Feb-2024
             CreateMap<ApplicationUserDto, ApplicationUser>();
             CreateMap<UpdateLoginAccountDto, Customer>();
+            CreateMap<BankAccountDto, BankAccount>();
+            CreateMap<CreateBankAccountDto, BankAccount>();
+            CreateMap<UpdateBankAccountDto, BankAccount>();
+            CreateMap<UpdateBalanceDto, BankAccount>();
             #endregion
 
             #region Map To Dto
@@ -26,6 +31,7 @@ namespace ATM.Mapping
 
             // Added by TR on 08-Feb-2024
             CreateMap<ApplicationUser, ApplicationUserDto>();
+            CreateMap<BankAccount, BankAccountDto>();
             #endregion
 
         }

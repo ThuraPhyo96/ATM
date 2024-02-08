@@ -1,0 +1,138 @@
+﻿@model List<ATM.AppServices.BankAccountSetup.Dtos.BankAccountDto>
+@using ATM.Helpers
+
+@{
+    ViewData["Title"] = "Bank Account(s)";
+    string statusMessage = (TempData[SMessage.SuccessMessage] ?? string.Empty) as string;
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<hr />
+<p>
+    <button onclick="createBankAccount()" class="btn btn-primary">Create New</button>
+</p>
+
+<p>
+    @if (!string.IsNullOrEmpty(statusMessage))
+    {
+        @await Html.PartialAsync(SPartialViews.ActionAlert, statusMessage)
+    }
+</p>
+
+<div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+        <div>
+            <table id="bankAccountTable" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Customer Name</th>
+                        <th>Account Number</th>
+                        <th>Account Type</th>
+                        <th>Balance</th>
+                        <th>Audit Info</th>
+                        <th class="text-center">Enables?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <a href="#" onclick="update('@item.BankAccountGuid.ToString()')" title="Update Balance" style="color: #3399ff">
+                                    <i class="fa fa-pencil-square fa-lg"></i>
+                                </a>
+                                &ensp;
+                                <a href="#" onclick="updateBalance('@item.BankAccountGuid.ToString()')" title="Update Balance" style="color: #3399ff">
+                                    <i class="fa fa-credit-card fa-lg"></i>
+                                </a>
+                            </td>
+                            <td>@item.Customer.FirstName</td>
+                            <td>@item.AccountNumber</td>
+                            <td>@Html.Raw(BankAccountHelper.GetAccountType(item.AccountType))</td>
+                            <td>@item.Balance.ToString("#,#00.00")</td>
+                            <td>
+                                @Html.Raw(CustomerHelper.GetUpdatedUserInfo(@item.UpdatedTime))
+                            </td>
+                            <td class="text-center"><input type="checkbox" @(item.IsActive ? "checked" : "") /></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="createBankAccount" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="updateBalanceModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="updateModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $('#bankAccountTable').DataTable({
+            order: [[0, 'asc']]
+        });
+
+        function createBankAccount() {
+            $.ajax({
+                url: "/BankAccount/CreateModal",
+                type: "POST",
+                success: function (response) {
+                    $('#createBankAccount div.modal-content').html(response);
+                    $("#createBankAccount").modal('show');
+                },
+                error: function (request, status, error) {
+                    alert(request.responseText);
+                }
+            });
+        }
+
+        function updateBalance(guid) {
+            $.ajax({
+                url: "/BankAccount/UpdateBalanceModal",
+                type: "POST",
+                data: { guid: guid },
+                success: function (response) {
+                    $('#updateBalanceModal div.modal-content').html(response);
+                    $("#updateBalanceModal").modal('show');
+                },
+                error: function (request, status, error) {
+                    alert(request.responseText);
+                }
+            });
+        }
+
+        function update(guid) {
+            $.ajax({
+                url: "/BankAccount/EditModal",
+                type: "POST",
+                data: { guid: guid },
+                success: function (response) {
+                    $('#updateModal div.modal-content').html(response);
+                    $("#updateModal").modal('show');
+                },
+                error: function (request, status, error) {
+                    alert(request.responseText);
+                }
+            });
+        }
+    </script>
+}

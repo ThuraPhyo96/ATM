@@ -1,8 +1,12 @@
 ﻿using ATM.AppServices.Authentication;
 using ATM.AppServices.Authentication.Dtos;
+using ATM.AppServices.BankAccountSetup;
+using ATM.AppServices.BankAccountSetup.Dtos;
 using ATM.AppServices.CustomerSetup;
 using ATM.AppServices.CustomerSetup.Dtos;
+using ATM.AppServices.PredefinedSeedData;
 using ATM.Areas.Identity.Data;
+using ATM.Data;
 using ATM.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -20,13 +24,16 @@ namespace ATM.Controllers
         private readonly ICustomerAppService _customerAppService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IAuthenticationAppService _authenticationAppService;
+        private readonly IBankAccountAppService _bankAccountAppService;
 
         public CustomerController(ICustomerAppService customerAppService, UserManager<ApplicationUser> userManager,
-            IAuthenticationAppService authenticationAppService)
+            IAuthenticationAppService authenticationAppService,
+            IBankAccountAppService bankAccountAppService)
         {
             _customerAppService = customerAppService;
             _userManager = userManager;
             _authenticationAppService = authenticationAppService;
+            _bankAccountAppService = bankAccountAppService;
         }
 
         // GET: CustomerController
@@ -164,6 +171,55 @@ namespace ATM.Controllers
                     TempData[SMessage.SuccessMessage] = SUserMessage.CreateFail;
 
                 return RedirectToAction(nameof(Detail), new { guid = customer.CustomerGuid.ToString() });
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> CreateBankAccountModal(string guid)
+        {
+            CustomerDto result = await _customerAppService.GetDetailByGuid(guid);
+            ViewData[SBankAccountMessage.AccountTypes] = AccountTypes.GetAll();
+
+            CreateBankAccountDto createBankAccount = new CreateBankAccountDto()
+            {
+                CustomerId = result.CustomerId,
+                CustomerGuid = result.CustomerGuid.ToString(),
+                Balance = 1000
+            };
+
+            return PartialView("_CreateBankAccountModal", createBankAccount);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CreateBankAccount(CreateBankAccountDto input)
+        {
+            try
+            {
+                var loginUser = await _userManager.GetUserAsync(User);
+                if (loginUser == null)
+                    return View();
+
+                string message = await _bankAccountAppService.CheckDuplicateOnCreate(input.AccountNumber);
+                if (!string.IsNullOrEmpty(message))
+                {
+                    TempData[SMessage.SuccessMessage] = SBankAccountMessage.DuplicatedAccount;
+                    return View();
+                }
+
+                input.CreatedUserId = loginUser.Id;
+                var bankAccount = await _bankAccountAppService.CreateBankAccount(input);
+
+                if (bankAccount.BankAccountId != 0)
+                    TempData[SMessage.SuccessMessage] = SBankAccountMessage.CreateSuccess;
+                else
+                    TempData[SMessage.SuccessMessage] = SBankAccountMessage.CreateFail;
+
+                return RedirectToAction(nameof(Detail), new { guid = input.CustomerGuid });
             }
             catch
             {

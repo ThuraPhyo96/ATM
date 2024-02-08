@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 
 namespace ATM.AppServices.CustomerSetup
 {

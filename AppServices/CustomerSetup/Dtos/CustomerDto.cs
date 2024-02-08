@@ -6,12 +6,15 @@ using System.ComponentModel.DataAnnotations;
 using System;
 using ATM.AppServices.Authentication;
 using ATM.AppServices.Authentication.Dtos;
+using ATM.AppServices.BankAccountSetup.Dtos;
 
 namespace ATM.AppServices.CustomerSetup.Dtos
 {
     public class CustomerDto : AuditInfo
     {
         public int CustomerId { get; set; }
+
+        [Display(Name = "Customer")]
         public Guid CustomerGuid { get; set; }
 
         [Required]
@@ -58,6 +61,10 @@ namespace ATM.AppServices.CustomerSetup.Dtos
         public bool IsActive { get; set; }
 
         public ApplicationUserDto LoginUser { get; set; }
+
+        public IReadOnlyList<BankAccountDto> BankAccounts { get; set; } = new List<BankAccountDto>();
+
+        public CreateBankAccountDto CreateBankAccount { get; set; }
     }
 
     public class CreateCustomerDto : CreatedUser

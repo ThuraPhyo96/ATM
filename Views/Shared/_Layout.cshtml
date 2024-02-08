@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/lib/DataTables/datatables.min.css" />
     <link rel="stylesheet" href="~/icons/font-awesome-4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
 </head>
 <body>
     <header>
@@ -21,10 +22,13 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item active">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a>
+                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Dashboard</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Index">Customer Setup</a>
+                            <a class="nav-link text-dark" asp-controller="Customer" asp-action="Index">Customer Setup</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="BankAccount" asp-action="Index">Bank Account Setup</a>
                         </li>
                     </ul>
                     <form class="form-inline my-2 my-lg-0" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
@@ -50,6 +54,15 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/lib/DataTables/datatables.min.js"></script>
+    <script src="~/lib/select2/dist/js/select2.min.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.select2').select2({
+            placeholder: 'Select an option',
+            allowClear: true
+        });
+    });
+</script>
