@@ -28,6 +28,9 @@ namespace ATM.Data
         [StringLength(MaxLength.Max_100)]
         public string Email { get; set; }
 
+        [StringLength(MaxLength.Max_12)]
+        public string MobileNumber { get; set; }
+
         [StringLength(MaxLength.Max_100)]
         public string JobTitle { get; set; }
 

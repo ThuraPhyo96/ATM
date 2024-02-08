@@ -53,10 +53,8 @@ namespace ATM.Migrations
                 {
                     CustomerId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreatedUserInfoId = table.Column<string>(nullable: true),
                     CreatedUserId = table.Column<string>(nullable: true),
                     CreationTime = table.Column<DateTime>(nullable: true, defaultValueSql: "getdate()"),
-                    UpdatedUserInfoId = table.Column<string>(nullable: true),
                     UpdatedUserId = table.Column<string>(nullable: true),
                     UpdatedTime = table.Column<DateTime>(nullable: true),
                     CustomerGuid = table.Column<Guid>(nullable: false, defaultValueSql: "NEWID()"),
@@ -101,10 +99,8 @@ namespace ATM.Migrations
                 {
                     BankAccountId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreatedUserInfoId = table.Column<string>(nullable: true),
                     CreatedUserId = table.Column<string>(nullable: true),
                     CreationTime = table.Column<DateTime>(nullable: true, defaultValueSql: "getdate()"),
-                    UpdatedUserInfoId = table.Column<string>(nullable: true),
                     UpdatedUserId = table.Column<string>(nullable: true),
                     UpdatedTime = table.Column<DateTime>(nullable: true),
                     BankAccountGuid = table.Column<Guid>(nullable: false, defaultValueSql: "NEWID()"),
@@ -129,7 +125,7 @@ namespace ATM.Migrations
                         column: x => x.CustomerId,
                         principalTable: "Customers",
                         principalColumn: "CustomerId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_BankAccounts_AspNetUsers_UpdatedUserId",
                         column: x => x.UpdatedUserId,
@@ -144,10 +140,8 @@ namespace ATM.Migrations
                 {
                     BalanceHistoryId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreatedUserInfoId = table.Column<string>(nullable: true),
                     CreatedUserId = table.Column<string>(nullable: true),
                     CreationTime = table.Column<DateTime>(nullable: true, defaultValueSql: "getdate()"),
-                    UpdatedUserInfoId = table.Column<string>(nullable: true),
                     UpdatedUserId = table.Column<string>(nullable: true),
                     UpdatedTime = table.Column<DateTime>(nullable: true),
                     BalanceHistoryGuid = table.Column<Guid>(nullable: false, defaultValueSql: "NEWID()"),
@@ -193,10 +187,8 @@ namespace ATM.Migrations
                 {
                     BankCardId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreatedUserInfoId = table.Column<string>(nullable: true),
                     CreatedUserId = table.Column<string>(nullable: true),
                     CreationTime = table.Column<DateTime>(nullable: true, defaultValueSql: "getdate()"),
-                    UpdatedUserInfoId = table.Column<string>(nullable: true),
                     UpdatedUserId = table.Column<string>(nullable: true),
                     UpdatedTime = table.Column<DateTime>(nullable: true),
                     BankCardGuid = table.Column<Guid>(nullable: false, defaultValueSql: "NEWID()"),

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ATM.Migrations
 {
     [DbContext(typeof(ATMContext))]
-    [Migration("20240206180543_Add_Setup_Tables")]
+    [Migration("20240207140838_Add_Setup_Tables")]
     partial class Add_Setup_Tables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,9 +42,6 @@ namespace ATM.Migrations
                     b.Property<string>("CreatedUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CreatedUserInfoId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("CreationTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -69,9 +66,6 @@ namespace ATM.Migrations
 
                     b.Property<string>("UpdatedUserId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UpdatedUserInfoId")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("BalanceHistoryId");
 
@@ -114,9 +108,6 @@ namespace ATM.Migrations
                     b.Property<string>("CreatedUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CreatedUserInfoId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("CreationTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -138,9 +129,6 @@ namespace ATM.Migrations
 
                     b.Property<string>("UpdatedUserId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UpdatedUserInfoId")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("BankAccountId");
 
@@ -174,9 +162,6 @@ namespace ATM.Migrations
                     b.Property<string>("CreatedUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CreatedUserInfoId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("CreationTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -201,9 +186,6 @@ namespace ATM.Migrations
 
                     b.Property<string>("UpdatedUserId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UpdatedUserInfoId")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ValidDate")
                         .HasColumnType("datetime2");
@@ -237,9 +219,6 @@ namespace ATM.Migrations
 
                     b.Property<string>("CreatedUserId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CreatedUserInfoId")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("CreationTime")
                         .ValueGeneratedOnAdd()
@@ -294,9 +273,6 @@ namespace ATM.Migrations
 
                     b.Property<string>("UpdatedUserId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UpdatedUserInfoId")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CustomerId");
 

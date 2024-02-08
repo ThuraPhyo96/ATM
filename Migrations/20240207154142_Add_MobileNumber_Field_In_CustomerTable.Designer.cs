@@ -4,14 +4,16 @@ using ATM.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ATM.Migrations
 {
     [DbContext(typeof(ATMContext))]
-    partial class ATMContextModelSnapshot : ModelSnapshot
+    [Migration("20240207154142_Add_MobileNumber_Field_In_CustomerTable")]
+    partial class Add_MobileNumber_Field_In_CustomerTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
