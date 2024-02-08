@@ -21,4 +21,15 @@
         public const string ActionAlert = "_ActionMessage";
         public const string AccessDenied = "AccessDenied";
     }
+
+    public struct SUserMessage
+    {
+        public const string CreateSuccess = "Login account has been successfully created.";
+        public const string CreateFail = "Error: Creation login account failed!";
+        public const string Updateuccess = "Login account has been successfully updated.";
+        public const string UpdateFail = "Error: Update login account failed!";
+
+        public const string DuplicatedAccount = "Error: Username already exist and does not allow duplication!";
+    }
+
 }

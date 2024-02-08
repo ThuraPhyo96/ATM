@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System;
 using ATM.AppServices.Authentication.Dtos;
 using Microsoft.Extensions.DependencyInjection;
+using ATM.Helpers;
 
 namespace ATM.AppServices.Authentication
 {
@@ -37,21 +38,25 @@ namespace ATM.AppServices.Authentication
                 throw new Exception("The password is probably not strong enough!");
             }
 
+            await AssignRoleToUser(user.Id, input.RoleName);
             return user.Id;
         }
 
         public async Task<IdentityResult> AssignRoleToUser(string uid, string role)
         {
             IdentityResult IR;
-            var user = await _userManager.FindByIdAsync(uid);
-
-            if (user == null)
-            {
-                throw new Exception("The user password was probably not strong enough!");
-            }
-
+            var user = await _userManager.FindByIdAsync(uid) ?? throw new Exception("The user password was probably not strong enough!");
             IR = await _userManager.AddToRoleAsync(user, role);
             return IR;
+        }
+
+        public async Task<string> CheckDuplidcateUser(string username)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+            if (user != null)
+                return SUserMessage.DuplicatedAccount;
+            else
+                return string.Empty;
         }
     }
 }

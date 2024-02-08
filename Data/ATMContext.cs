@@ -28,6 +28,8 @@ namespace ATM.Data
             // Add your customizations after calling base.OnModelCreating(builder);
 
             // Default values
+            builder.Entity<ApplicationUser>().Property(b => b.CreationTime).HasDefaultValueSql("getdate()");
+
             builder.Entity<Customer>().HasIndex(u => u.CustomerGuid).IsUnique();
             builder.Entity<Customer>().Property(x => x.CustomerGuid).HasDefaultValueSql("NEWID()");
             builder.Entity<Customer>().Property(b => b.CreationTime).HasDefaultValueSql("getdate()");

@@ -1,4 +1,6 @@
-﻿using ATM.AppServices.CustomerSetup;
+﻿using ATM.AppServices.Authentication;
+using ATM.AppServices.Authentication.Dtos;
+using ATM.AppServices.CustomerSetup;
 using ATM.AppServices.CustomerSetup.Dtos;
 using ATM.Areas.Identity.Data;
 using ATM.Helpers;
@@ -17,11 +19,14 @@ namespace ATM.Controllers
     {
         private readonly ICustomerAppService _customerAppService;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IAuthenticationAppService _authenticationAppService;
 
-        public CustomerController(ICustomerAppService customerAppService, UserManager<ApplicationUser> userManager)
+        public CustomerController(ICustomerAppService customerAppService, UserManager<ApplicationUser> userManager,
+            IAuthenticationAppService authenticationAppService)
         {
             _customerAppService = customerAppService;
             _userManager = userManager;
+            _authenticationAppService = authenticationAppService;
         }
 
         // GET: CustomerController
@@ -79,7 +84,7 @@ namespace ATM.Controllers
         }
 
         // GET: CustomerController/Edit/5
-        public async Task<ActionResult> Edit(string guid)
+        public async Task<ActionResult> Detail(string guid)
         {
             CustomerDto result = await _customerAppService.GetDetailByGuid(guid);
 
@@ -116,6 +121,49 @@ namespace ATM.Controllers
                     TempData[SMessage.SuccessMessage] = SCustomerMessage.UpdateFail;
 
                 return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // POST: CustomerController/CreateLoginAccount
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CreateLoginAccount(CreateApplicationUserDto input)
+        {
+            try
+            {
+                var loginUser = await _userManager.GetUserAsync(User);
+                if (loginUser == null)
+                    return View();
+
+                var customer = await _customerAppService.GetDetailByGuid(input.CustomerGuid);
+                input.UserName = customer.FirstName[..1] + customer.MobileNumber;
+
+                string message = await _authenticationAppService.CheckDuplidcateUser(input.UserName);
+                if (!string.IsNullOrEmpty(message))
+                {
+                    TempData[SMessage.SuccessMessage] = SCustomerMessage.DuplicatedNRIC;
+                    return View();
+                }
+
+                input.Email = customer.Email;
+                input.Password = "Sky@123wall";
+                input.RoleName = RoleNames.Customer;
+                input.CreatedUserId = loginUser.Id;
+                var userId = await _authenticationAppService.CreateUser(input);
+
+                if (!string.IsNullOrEmpty(userId))
+                {
+                    await _customerAppService.UpdateLoginAccountToCustomer(new UpdateLoginAccountDto(customer.CustomerId, userId, loginUser.Id));
+                    TempData[SMessage.SuccessMessage] = SUserMessage.CreateSuccess;
+                }
+                else
+                    TempData[SMessage.SuccessMessage] = SUserMessage.CreateFail;
+
+                return RedirectToAction(nameof(Detail), new { guid = customer.CustomerGuid.ToString() });
             }
             catch
             {

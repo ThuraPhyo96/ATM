@@ -2,12 +2,15 @@
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System;
+using System.ComponentModel;
 
 namespace ATM.AppServices.Authentication.Dtos
 {
     public class ApplicationUserDto : IdentityUser
     {
         public int UserType { get; set; }
+
+        [Description("Enables?")]
         public bool IsActive { get; set; }
 
         #region Audit Log Info
@@ -23,6 +26,7 @@ namespace ATM.AppServices.Authentication.Dtos
 
     public class CreateApplicationUserDto : IdentityUser
     {
+        public string CustomerGuid { get; set; }
         public string Password { get; set; }
         public int UserType { get; set; }
         public bool IsActive { get; set; } = true;
@@ -32,6 +36,7 @@ namespace ATM.AppServices.Authentication.Dtos
         public string CreatedUserId { get; set; }
         public DateTime? CreationTime { get; set; } = DateTime.Now;
         #endregion
+        public string RoleName { get; set; }
 
         public CreateApplicationUserDto()
         {

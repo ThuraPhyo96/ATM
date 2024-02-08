@@ -15,5 +15,7 @@ namespace ATM.AppServices.CustomerSetup
 
         Task<CustomerDto> UpdateCustomer(UpdateCustomerDto input);
         Task<string> CheckDuplicateOnUpdate(int id, string nric);
+
+        Task<CustomerDto> UpdateLoginAccountToCustomer(UpdateLoginAccountDto input);
     }
 }

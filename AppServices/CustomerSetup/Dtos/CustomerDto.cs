@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System;
 using ATM.AppServices.Authentication;
+using ATM.AppServices.Authentication.Dtos;
 
 namespace ATM.AppServices.CustomerSetup.Dtos
 {
@@ -55,6 +56,8 @@ namespace ATM.AppServices.CustomerSetup.Dtos
 
         [Display(Name = "Enables?")]
         public bool IsActive { get; set; }
+
+        public ApplicationUserDto LoginUser { get; set; }
     }
 
     public class CreateCustomerDto : CreatedUser
@@ -146,5 +149,23 @@ namespace ATM.AppServices.CustomerSetup.Dtos
         public string NRIC { get; set; } = string.Empty;
         public string FatherName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
+    }
+
+    public class UpdateLoginAccountDto : UpdatedUser
+    {
+        public int CustomerId { get; set; }
+        public string LoginUserId { get; set; }
+
+        public UpdateLoginAccountDto()
+        {
+
+        }
+
+        public UpdateLoginAccountDto(int customerId, string loginUserId, string updatedUserId)
+        {
+            CustomerId = customerId;
+            LoginUserId = loginUserId;
+            UpdatedUserId = updatedUserId;
+        }
     }
 }

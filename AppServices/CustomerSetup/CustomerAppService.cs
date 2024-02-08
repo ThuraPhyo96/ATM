@@ -33,7 +33,12 @@ namespace ATM.AppServices.CustomerSetup
             {
                 return new CustomerDto();
             }
-            var existingObj = await _context.Customers.AsNoTracking().FirstOrDefaultAsync(x => x.CustomerId == id);
+            var existingObj = await _context.Customers
+                .AsNoTracking()
+                .Include(x => x.LoginUser)
+                .Include(x => x.BankAccounts).ThenInclude(x => x.BankCards)
+                .Include(x => x.BalanceHistories)
+                .FirstOrDefaultAsync(x => x.CustomerId == id);
             return _mapper.Map<CustomerDto>(existingObj);
         }
 
@@ -43,7 +48,12 @@ namespace ATM.AppServices.CustomerSetup
             {
                 return new CustomerDto();
             }
-            var existingObj = await _context.Customers.AsNoTracking().FirstOrDefaultAsync(x => x.CustomerGuid.ToString() == guid);
+            var existingObj = await _context.Customers
+                .AsNoTracking()
+                .Include(x => x.LoginUser)
+                .Include(x => x.BankAccounts).ThenInclude(x => x.BankCards)
+                .Include(x => x.BalanceHistories)
+                .FirstOrDefaultAsync(x => x.CustomerGuid.ToString() == guid);
             return _mapper.Map<CustomerDto>(existingObj);
         }
 
@@ -109,6 +119,20 @@ namespace ATM.AppServices.CustomerSetup
                 return SCustomerMessage.DuplicatedNRIC;
             else
                 return string.Empty;
+        }
+
+        public async Task<CustomerDto> UpdateLoginAccountToCustomer(UpdateLoginAccountDto input)
+        {
+            if (!await _context.Customers.AnyAsync(x => x.CustomerId == input.CustomerId))
+            {
+                return new CustomerDto();
+            }
+
+            var existingObj = await _context.Customers.FirstOrDefaultAsync(x => x.CustomerId == input.CustomerId);
+            _mapper.Map(input, existingObj);
+            _context.Customers.Update(existingObj);
+            _context.SaveChanges();
+            return _mapper.Map<CustomerDto>(existingObj);
         }
         #endregion
     }
