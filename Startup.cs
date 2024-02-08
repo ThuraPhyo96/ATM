@@ -1,3 +1,4 @@
+using ATM.AppServices.CustomerSetup;
 using ATM.Areas.Identity.Data;
 using ATM.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -93,6 +94,7 @@ namespace ATM
                 option.IterationCount = 12000;
             });
 
+            services.AddAutoMapper(typeof(Startup));
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddControllers(config =>
             {
@@ -111,6 +113,10 @@ namespace ATM
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
+
+            #region Register application services
+            services.AddScoped<ICustomerAppService, CustomerAppService>();
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
