@@ -15,6 +15,9 @@ namespace ATM.Data
         public int BankAccountId { get; set; }
         public BankAccount BankAccount { get; set; }
 
+        [StringLength(MaxLength.Max_20)]
+        public string BankCardNumber { get; set; }
+
         public string PIN { get; set; }
 
         public DateTime ValidDate { get; set; }
