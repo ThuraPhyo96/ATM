@@ -73,6 +73,22 @@ namespace ATM.AppServices.CustomerSetup
 
             return _mapper.Map<List<CustomerDto>>(objs);
         }
+
+        public IReadOnlyList<SelectListItem> GetAllCustomers()
+        {
+            var objs = _context.Customers
+                .AsNoTracking()
+                .OrderBy(x => x.FirstName)
+                .AsQueryable();
+
+            var customers = _mapper.Map<List<CustomerDto>>(objs);
+
+            return customers.Select(c => new SelectListItem
+            {
+                Text = $"{c.FirstName} | {c.NRIC} | {c.MobileNumber}",
+                Value = c.CustomerGuid.ToString()
+            }).ToList();
+        }
         #endregion
 
         #region Create

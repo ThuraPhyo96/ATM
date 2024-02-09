@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System;
 using ATM.AppServices.CustomerSetup.Dtos;
 using System.ComponentModel;
+using ATM.AppServices.BankCardSetup.Dtos;
 
 namespace ATM.AppServices.BankAccountSetup.Dtos
 {
@@ -37,6 +38,8 @@ namespace ATM.AppServices.BankAccountSetup.Dtos
         [Display(Name = "Remarks")]
         [StringLength(MaxLength.Max_500)]
         public string Remark { get; set; }
+
+        public IReadOnlyList<BankCardDto> BankCards { get; set; } = new List<BankCardDto>();   
     }
 
     public class CreateBankAccountDto : CreatedUser

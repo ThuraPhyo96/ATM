@@ -1,5 +1,6 @@
 using ATM.AppServices.Authentication;
 using ATM.AppServices.BankAccountSetup;
+using ATM.AppServices.BankCardSetup;
 using ATM.AppServices.CustomerSetup;
 using ATM.Areas.Identity.Data;
 using ATM.Data;
@@ -120,6 +121,7 @@ namespace ATM
             services.AddScoped<ICustomerAppService, CustomerAppService>();
             services.AddScoped<IAuthenticationAppService, AuthenticationAppService>();
             services.AddScoped<IBankAccountAppService, BankAccountAppService>();
+            services.AddScoped<IBankCardAppService, BankCardAppService>();
             #endregion
         }
 

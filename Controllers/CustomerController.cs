@@ -2,6 +2,8 @@
 using ATM.AppServices.Authentication.Dtos;
 using ATM.AppServices.BankAccountSetup;
 using ATM.AppServices.BankAccountSetup.Dtos;
+using ATM.AppServices.BankCardSetup;
+using ATM.AppServices.BankCardSetup.Dtos;
 using ATM.AppServices.CustomerSetup;
 using ATM.AppServices.CustomerSetup.Dtos;
 using ATM.AppServices.PredefinedSeedData;
@@ -25,15 +27,18 @@ namespace ATM.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IAuthenticationAppService _authenticationAppService;
         private readonly IBankAccountAppService _bankAccountAppService;
+        private readonly IBankCardAppService _bankCardAppService;
 
         public CustomerController(ICustomerAppService customerAppService, UserManager<ApplicationUser> userManager,
             IAuthenticationAppService authenticationAppService,
-            IBankAccountAppService bankAccountAppService)
+            IBankAccountAppService bankAccountAppService,
+            IBankCardAppService bankCardAppService)
         {
             _customerAppService = customerAppService;
             _userManager = userManager;
             _authenticationAppService = authenticationAppService;
             _bankAccountAppService = bankAccountAppService;
+            _bankCardAppService = bankCardAppService;   
         }
 
         // GET: CustomerController
@@ -226,5 +231,58 @@ namespace ATM.Controllers
                 return View();
             }
         }
+
+        //#region Bank Card
+        //[HttpPost]
+        //public async Task<ActionResult> CreateBankCardModal(string guid)
+        //{
+        //    CustomerDto result = await _customerAppService.GetDetailByGuid(guid);
+
+        //    CreateBankCardDto bankCard = new CreateBankCardDto()
+        //    {
+        //        CustomerId = result.CustomerId
+        //    };
+
+        //    return PartialView("_CreateBankCardModal", bankCard);
+        //}
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> CreateBankCard(CreateBankCardDto input)
+        //{
+        //    try
+        //    {
+        //        var loginUser = await _userManager.GetUserAsync(User);
+        //        if (loginUser == null)
+        //            return View();
+
+        //        string message = await _bankCardAppService.CheckDuplicateOnCreate(input.BankCardNumber);
+        //        if (!string.IsNullOrEmpty(message))
+        //        {
+        //            TempData[SMessage.SuccessMessage] = SBankCardMessage.DuplicatedCardNumber;
+        //            return View();
+        //        }
+
+        //        input.CreatedUserId = loginUser.Id;
+        //        var bankCard = await _bankCardAppService.CreateBankCard(input);
+
+        //        if (bankCard.BankCardId != 0)
+        //            TempData[SMessage.SuccessMessage] = SBankCardMessage.CreateSuccess;
+        //        else
+        //            TempData[SMessage.SuccessMessage] = SBankCardMessage.CreateFail;
+
+        //        return RedirectToAction(nameof(Detail), new { guid = input.CustomerGuid });
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
+
+        //public void GetBankCardDropdownItems(string guid)
+        //{
+        //    ViewData[SBankCardMessage.BankAccounts] = _bankAccountAppService.GetBankAccountByCustomerId(guid);
+        //}
+        //#endregion
     }
 }

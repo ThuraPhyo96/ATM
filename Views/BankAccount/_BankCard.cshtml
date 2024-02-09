@@ -1,0 +1,47 @@
+﻿@using ATM.Helpers
+@model IReadOnlyList<ATM.AppServices.BankCardSetup.Dtos.BankCardDto>
+
+@{
+    ViewData["Title"] = "Bank Card Detail";
+}
+
+<p>
+    <button onclick="createBankCard()" class="btn btn-primary">Create New</button>
+</p>
+
+<div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+        <div>
+            <table id="bankCardTable" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Card Number</th>
+                        <th>PIN</th>
+                        <th>Opening Date</th>
+                        <th>Vaild Till Date</th>
+                        <th>Audit Info</th>
+                        <th class="text-center">Enables?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                            </td>
+                            <td>@item.BankCardNumber</td>
+                            <td>@item.PIN</td>
+                            <td>@item.CreationTime.Value.ToString("dd-MMM-yyyy")</td>
+                            <td>@item.ValidDate.ToString("dd-MMM-yyyy")</td>
+                            <td>
+                                @Html.Raw(CustomerHelper.GetUpdatedUserInfo(@item.UpdatedTime))
+                            </td>
+                            <td class="text-center"><input type="checkbox" @(item.IsActive ? "checked" : "") /></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

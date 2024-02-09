@@ -14,6 +14,6 @@ namespace ATM.AppServices.BankAccountSetup
         Task<string> CheckDuplicateOnCreate(string accountNo);
         Task<BankAccountDto> UpdateBankAccount(UpdateBankAccountDto input);
         Task<BankAccountDto> UpdateBalance(UpdateBalanceDto input);
-        IReadOnlyList<SelectListItem> GetAllCustomers();
+        Task<IReadOnlyList<SelectListItem>> GetBankAccountByCustomerId(string guid);
     }
 }

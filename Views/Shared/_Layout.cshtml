@@ -25,10 +25,13 @@
                             <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Dashboard</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Customer" asp-action="Index">Customer Setup</a>
+                            <a class="nav-link text-dark" asp-controller="Customer" asp-action="Index">Customer</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="BankAccount" asp-action="Index">Bank Account Setup</a>
+                            <a class="nav-link text-dark" asp-controller="BankAccount" asp-action="Index">Bank Account</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="BankCard" asp-action="Index">Bank Card</a>
                         </li>
                     </ul>
                     <form class="form-inline my-2 my-lg-0" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">

@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -46,6 +47,7 @@ namespace ATM.AppServices.BankAccountSetup
             var existingObj = await _context.BankAccounts
                 .AsNoTracking()
                 .Include(x => x.Customer)
+                .Include(x => x.BankCards)
                 .FirstOrDefaultAsync(x => x.BankAccountGuid.ToString() == guid);
             return _mapper.Map<BankAccountDto>(existingObj);
         }
@@ -74,20 +76,20 @@ namespace ATM.AppServices.BankAccountSetup
             return _mapper.Map<List<BankAccountDto>>(objs);
         }
 
-        public IReadOnlyList<SelectListItem> GetAllCustomers()
+        public async Task<IReadOnlyList<SelectListItem>> GetBankAccountByCustomerId(string guid)
         {
-            var objs = _context.Customers
-                .AsNoTracking()
-                .OrderBy(x => x.FirstName)
-                .AsQueryable();
-
-            var customers = _mapper.Map<List<CustomerDto>>(objs);
-
-            return customers.Select(c => new SelectListItem
+            if (!await _context.BankAccounts.AnyAsync(x => x.Customer.CustomerGuid.ToString() == guid))
             {
-                Text = $"{c.FirstName} | {c.NRIC} | {c.MobileNumber}",
-                Value = c.CustomerGuid.ToString()
-            }).ToList();
+                return new List<SelectListItem>();
+            }
+            return await _context.BankAccounts
+                .AsNoTracking()
+                .Where(x => x.Customer.CustomerGuid.ToString() == guid)
+                .Select(x => new SelectListItem()
+                {
+                    Value = x.BankAccountGuid.ToString(),
+                    Text = x.AccountNumber
+                }).ToListAsync();
         }
         #endregion
 

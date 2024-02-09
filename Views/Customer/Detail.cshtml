@@ -25,24 +25,22 @@
 <nav>
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
         <button class="nav-link active" id="nav-profile-tab" data-toggle="tab" data-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="true">Profile</button>
-        <button class="nav-link" id="nav-login-account-tab" data-toggle="tab" data-target="#nav-login-account" type="button" role="tab" aria-controls="nav-login-account" aria-selected="false">Login Account</button>
         <button class="nav-link" id="nav-bank-account-tab" data-toggle="tab" data-target="#nav-bank-account" type="button" role="tab" aria-controls="nav-bank-account" aria-selected="false">Bank Account</button>
-        <button class="nav-link" id="nav-bank-card-tab" data-toggle="tab" data-target="#nav-bank-card" type="button" role="tab" aria-controls="nav-bank-card" aria-selected="false">Bank Card</button>
         <button class="nav-link" id="nav-history-tab" data-toggle="tab" data-target="#nav-history" type="button" role="tab" aria-controls="nav-history" aria-selected="false">History</button>
+        <button class="nav-link" id="nav-login-account-tab" data-toggle="tab" data-target="#nav-login-account" type="button" role="tab" aria-controls="nav-login-account" aria-selected="false">Login Account</button>
     </div>
 </nav>
 <div class="tab-content" id="nav-tabContent">
     <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
         @await Html.PartialAsync("_Edit", Model)
     </div>
-    <div class="tab-pane fade" id="nav-login-account" role="tabpanel" aria-labelledby="nav-login-account-tab">
-        @await Html.PartialAsync("_LoginAccount", Model)
-    </div>
     <div class="tab-pane fade" id="nav-bank-account" role="tabpanel" aria-labelledby="nav-bank-account-tab">
         @await Html.PartialAsync("_BankAccount", Model)
     </div>
-    <div class="tab-pane fade" id="nav-bank-card" role="tabpanel" aria-labelledby="nav-bank-card-tab">...</div>
     <div class="tab-pane fade" id="nav-history" role="tabpanel" aria-labelledby="nav-history-tab">...</div>
+    <div class="tab-pane fade" id="nav-login-account" role="tabpanel" aria-labelledby="nav-login-account-tab">
+        @await Html.PartialAsync("_LoginAccount", Model)
+    </div>
 </div>
 
 <div class="modal fade" id="createBankAccount" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">

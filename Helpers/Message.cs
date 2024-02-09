@@ -45,4 +45,17 @@
 
         public const string DuplicatedAccount = "Error: Account number already exist and does not allow duplication!";
     }
+
+    public struct SBankCardMessage
+    {
+        public const string CreateSuccess = "Bank card has been successfully created.";
+        public const string CreateFail = "Error: Creation bank card failed!";
+        public const string UpdateSuccess = "Bank card has been successfully updated.";
+        public const string UpdateFail = "Error: Update Bank card failed!";
+        public const string UpdatePin = "PIN has been successfully updated.";
+        public const string UpdatePinFail = "Error: Update PIN failed!";
+        public const string BankAccounts = "BankAccounts";
+
+        public const string DuplicatedCardNumber = "Error: Bank card number already exist and does not allow duplication!";
+    }
 }

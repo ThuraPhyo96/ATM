@@ -1,9 +1,12 @@
 ﻿using ATM.AppServices.BankAccountSetup;
 using ATM.AppServices.BankAccountSetup.Dtos;
+using ATM.AppServices.BankCardSetup;
+using ATM.AppServices.BankCardSetup.Dtos;
 using ATM.AppServices.CustomerSetup;
 using ATM.AppServices.CustomerSetup.Dtos;
 using ATM.AppServices.PredefinedSeedData;
 using ATM.Areas.Identity.Data;
+using ATM.Data;
 using ATM.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -18,13 +21,16 @@ namespace ATM.Controllers
         private readonly IBankAccountAppService _bankAccountAppService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ICustomerAppService _customerAppService;
+        private readonly IBankCardAppService _bankCardAppService;
 
         public BankAccountController(IBankAccountAppService bankAccountAppService, UserManager<ApplicationUser> userManager,
-            ICustomerAppService customerAppService)
+            ICustomerAppService customerAppService,
+            IBankCardAppService bankCardAppService)
         {
             _bankAccountAppService = bankAccountAppService;
             _userManager = userManager;
             _customerAppService = customerAppService;
+            _bankCardAppService = bankCardAppService;
         }
 
         // GET: BankAccountController
@@ -82,11 +88,15 @@ namespace ATM.Controllers
         }
 
         // GET: BankAccountController/Edit/5
-        public async Task<ActionResult> EditModal(string guid)
+        public async Task<ActionResult> Detail(string guid)
         {
             GetDropdownItems();
-            var result = await _bankAccountAppService.GetDetailByGuid(guid);
-            return PartialView("_EditModal", result);
+            BankAccountDto result = await _bankAccountAppService.GetDetailByGuid(guid);
+
+            if (result == null)
+                return View(SPartialViews.AccessDenied);
+
+            return View(result);
         }
 
         // POST: BankAccountController/Edit/5
@@ -108,7 +118,7 @@ namespace ATM.Controllers
                 else
                     TempData[SMessage.SuccessMessage] = SBankAccountMessage.UpdateFail;
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Detail), new { guid = input.BankAccountGuid });
             }
             catch
             {
@@ -159,7 +169,7 @@ namespace ATM.Controllers
 
         public void GetDropdownItems()
         {
-            ViewData[SCustomerMessage.Customers] = _bankAccountAppService.GetAllCustomers();
+            ViewData[SCustomerMessage.Customers] = _customerAppService.GetAllCustomers();
             ViewData[SBankAccountMessage.AccountTypes] = AccountTypes.GetAll();
         }
     }
