@@ -30,6 +30,8 @@ namespace ATM.Data
         public string Remark { get; set; }
 
         public List<BankCard> BankCards { get; set; } = new List<BankCard>();
+
+        public List<BalanceHistory> BalanceHistories { get; set; } = new List<BalanceHistory>();
     }
 
     [Flags]

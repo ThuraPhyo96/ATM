@@ -17,6 +17,9 @@ namespace ATM.Data
         public int BankAccountId { get; set; }
         public BankAccount BankAccount { get; set; }
 
+        [DataType(DataType.Date)]
+        public DateTime TransactionDate { get; set; }
+
         [Column(TypeName = "decimal(18,2)")]
         public decimal Amount { get; set; }
 
@@ -34,6 +37,6 @@ namespace ATM.Data
         [Description("Withdraw")]
         Withdraw = 1,
         [Description("Deposite")]
-        Special = 2
+        Deposite = 2
     }
 }
