@@ -10,7 +10,8 @@ namespace ATM.AppServices.BankCardSetup
         Task<BankCardDto> GetDetailByGuid(string guid);
         IReadOnlyList<BankCardDto> GetAll(SearchBankCardDto input);
         Task<BankCardDto> CreateBankCard(CreateBankCardDto input);
-        Task<string> CheckDuplicateOnCreate(string cardNumber);
+        Task<string> CheckDuplicateOnCreate(int cid, int accountid, string cardNumber);
         Task<BankCardDto> UpdateBankCard(UpdateBankCardDto input);
+        Task<string> CheckValidCardNumber(CheckBankCardDto input);
     }
 }

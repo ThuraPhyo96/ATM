@@ -15,5 +15,7 @@ namespace ATM.AppServices.BankAccountSetup
         Task<BankAccountDto> UpdateBankAccount(UpdateBankAccountDto input);
         Task<BankAccountDto> UpdateBalance(UpdateBalanceDto input);
         Task<IReadOnlyList<SelectListItem>> GetBankAccountByCustomerId(string guid);
+        Task<BankAccountDto> UpdateBalanceByCustomer(UpdateBalanceByCustomerDto input);
+        Task<string> CheckEnoughBalance(UpdateBalanceByCustomerDto input);
     }
 }

@@ -1,7 +1,50 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model ATM.AppServices.CustomerSetup.Dtos.CustomerDto
+@using ATM.AppServices.Authorization;
+@using Microsoft.AspNetCore.Authorization
+@using ATM.Helpers
+@using ATM.Data
+@inject IAuthorizationService AuthorizationService
+
+@{
+    ViewData["Title"] = "Dashboard Page";
+    string roleName = (ViewBag.RoleName ?? string.Empty) as string;
+    string statusMessage = (TempData[SMessage.SuccessMessage] ?? string.Empty) as string;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-</div>
+<p>
+    @if (!string.IsNullOrEmpty(statusMessage))
+    {
+        @await Html.PartialAsync(SPartialViews.ActionAlert, statusMessage)
+    }
+</p>
+
+
+@if (roleName == RoleNames.SuperAdmin)
+{
+    <div class="text-center">
+        <h1 class="display-4">Super Admin Dashboard</h1>
+    </div>
+}
+else if (roleName == RoleNames.Customer)
+{
+    <input type="hidden" id="CustomerGuid" value="@Model.CustomerGuid.ToString()" />
+
+    @foreach (var item in Model.BankAccounts)
+    {
+        <div class="card">
+            <div class="card-header">
+                @Html.Raw(CustomerHelper.GetAccountType(item.AccountType))<br />
+                @item.AccountNumber
+            </div>
+            <div class="card-body">
+                <h5 class="card-title text-right">Available Balance</h5>
+                <p class="card-text text-right">@item.Balance.ToString("#,#00.00")</p>
+            </div>
+            <div class="card-footer text-right">
+                <a class="btn btn-primary" asp-action="Index" asp-controller="CardLogin" asp-route-cguid="@Model.CustomerGuid.ToString()" asp-route-aguid="@item.BankAccountGuid.ToString()" asp-route-type="@((int)EBalanceHistoryType.Withdraw)">Withdraw</a>
+                <a class="btn btn-primary" asp-action="Index" asp-controller="CardLogin" asp-route-cguid="@Model.CustomerGuid.ToString()" asp-route-aguid="@item.BankAccountGuid.ToString()" asp-route-type="@((int)EBalanceHistoryType.Deposite)">Deposit</a>
+                <a class="btn btn-primary" asp-action="Index" asp-controller="BalanceHistory" asp-route-cguid="@Model.CustomerGuid.ToString()" asp-route-aguid="@item.BankAccountGuid.ToString()" class="btn btn-primary">History</a>
+            </div>
+        </div>
+    }
+}

@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System;
 using ATM.AppServices.CustomerSetup.Dtos;
 using ATM.AppServices.BankAccountSetup.Dtos;
+using System.ComponentModel;
 
 namespace ATM.AppServices.BankCardSetup.Dtos
 {
@@ -98,5 +99,23 @@ namespace ATM.AppServices.BankCardSetup.Dtos
         public string CardNumber { get; set; } = string.Empty;
         public DateTime? FromValidDate { get; set; } = null;
         public DateTime? ToValidDate { get; set; } = null;
+    }
+
+    public class CheckBankCardDto
+    {
+        public string CustomerGuid { get; set; }
+
+        public string BankAccountGuid { get; set; }
+
+        public int ActionType { get; set; }
+
+        [Required]
+        [Display(Name = "Card Number")]
+        [StringLength(MaxLength.Max_20)]
+        public string BankCardNumber { get; set; }
+
+        [Required]
+        [Display(Name = "PIN")]
+        public string PIN { get; set; }
     }
 }

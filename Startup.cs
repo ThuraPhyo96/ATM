@@ -1,4 +1,6 @@
 using ATM.AppServices.Authentication;
+using ATM.AppServices.Authorization;
+using ATM.AppServices.BalanceHistorySetup;
 using ATM.AppServices.BankAccountSetup;
 using ATM.AppServices.BankCardSetup;
 using ATM.AppServices.CustomerSetup;
@@ -117,11 +119,16 @@ namespace ATM
                 options.Cookie.IsEssential = true;
             });
 
+            #region Authorization handlers.
+            services.AddScoped<IAuthorizationHandler, CustomerAuthorizationHandler>();
+            #endregion
+
             #region Register application services
             services.AddScoped<ICustomerAppService, CustomerAppService>();
             services.AddScoped<IAuthenticationAppService, AuthenticationAppService>();
             services.AddScoped<IBankAccountAppService, BankAccountAppService>();
             services.AddScoped<IBankCardAppService, BankCardAppService>();
+            services.AddScoped<IBalanceHistoryAppService, BalanceHistoryAppService>();
             #endregion
         }
 

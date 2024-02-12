@@ -1,0 +1,68 @@
+﻿@using ATM.Helpers
+@model ATM.AppServices.BankCardSetup.Dtos.CheckBankCardDto
+
+@{
+    ViewData["Title"] = "Card Credential";
+    string statusMessage = (TempData[SMessage.SuccessMessage] ?? string.Empty) as string;
+}
+
+<div class="row">
+    <div class="col-2">
+        <a asp-action="Index" asp-controller="Home" class="btn btn-primary">Back</a>
+    </div>
+    <div class="col-10">
+        <div class="text-center"> <h3>@ViewData["Title"]</h3></div>
+    </div>
+</div>
+
+<p>
+    @if (!string.IsNullOrEmpty(statusMessage))
+    {
+        @await Html.PartialAsync(SPartialViews.ActionAlert, statusMessage)
+    }
+</p>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CheckCredential" asp-controller="CardLogin" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CustomerGuid" />
+            <input type="hidden" asp-for="BankAccountGuid" />
+            <input type="hidden" asp-for="ActionType" />
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-4 col-md-4 col-sm-12">
+                        <label asp-for="BankCardNumber" class="control-label"></label>
+                    </div>
+                    <div class="col-8 col-md-8 col-sm-12">
+                        <input asp-for="BankCardNumber" class="form-control" />
+                        <span asp-validation-for="BankCardNumber" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-4 col-md-4 col-sm-12">
+                        <label asp-for="PIN" class="control-label"></label>
+                    </div>
+                    <div class="col-8 col-md-8 col-sm-12">
+                        <input type="password" asp-for="PIN" class="form-control" />
+                        <span asp-validation-for="PIN" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="CardLogin" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,48 @@
+﻿@using ATM.Helpers
+@model ATM.AppServices.BankAccountSetup.Dtos.UpdateBalanceByCustomerDto
+
+@{
+    ViewData["Title"] = BalanceHistoryHelper.GetCardActionType(Model.ActionType);
+    string statusMessage = (TempData[SMessage.SuccessMessage] ?? string.Empty) as string;
+}
+
+<div class="row">
+    <div class="col-2">
+        <a asp-action="Index" asp-controller="Home" class="btn btn-primary">Back</a>
+    </div>
+    <div class="col-10">
+        <div class="text-center"> <h3>@ViewData["Title"]</h3></div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="UpdateBalance" asp-controller="CardLogin" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="BankCardNumber" />
+            <input type="hidden" asp-for="ActionType" />
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-4 col-md-4 col-sm-12">
+                        <label asp-for="Balance" class="control-label"></label>
+                    </div>
+                    <div class="col-8 col-md-8 col-sm-12">
+                        <input asp-for="Balance" class="form-control" />
+                        <span asp-validation-for="Balance" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="@ViewData["Title"]" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

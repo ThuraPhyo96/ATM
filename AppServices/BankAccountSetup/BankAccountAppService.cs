@@ -1,9 +1,12 @@
-﻿using ATM.AppServices.BankAccountSetup.Dtos;
+﻿using ATM.AppServices.BalanceHistorySetup;
+using ATM.AppServices.BalanceHistorySetup.Dtos;
+using ATM.AppServices.BankAccountSetup.Dtos;
 using ATM.AppServices.CustomerSetup.Dtos;
 using ATM.Data;
 using ATM.Helpers;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Globalization;
@@ -16,11 +19,13 @@ namespace ATM.AppServices.BankAccountSetup
     {
         protected readonly ATMContext _context;
         protected readonly IMapper _mapper;
+        protected readonly IBalanceHistoryAppService _balanceHistoryAppService;
 
-        public BankAccountAppService(ATMContext context, IMapper mapper)
+        public BankAccountAppService(ATMContext context, IMapper mapper, IBalanceHistoryAppService balanceHistoryAppService)
         {
             _context = context;
             _mapper = mapper;
+            _balanceHistoryAppService = balanceHistoryAppService;
         }
 
         #region Get
@@ -144,6 +149,42 @@ namespace ATM.AppServices.BankAccountSetup
             _context.BankAccounts.Update(existingObj);
             _context.SaveChanges();
             return _mapper.Map<BankAccountDto>(existingObj);
+        }
+
+        public async Task<BankAccountDto> UpdateBalanceByCustomer(UpdateBalanceByCustomerDto input)
+        {
+            if (!await _context.BankCards.AnyAsync(x => x.BankCardNumber == input.BankCardNumber))
+            {
+                return new BankAccountDto();
+            }
+
+            var card = await _context.BankCards.FirstOrDefaultAsync(x => x.BankCardNumber == input.BankCardNumber);
+            var account = await _context.BankAccounts.FirstOrDefaultAsync(x => x.BankAccountId == card.BankAccountId);
+
+            if (input.ActionType == (int)EBalanceHistoryType.Withdraw)
+                account.Balance -= input.Balance;
+            else if (input.ActionType == (int)EBalanceHistoryType.Deposite)
+                account.Balance += input.Balance;
+
+            CreateBalanceHistoryDto createBalanceHistory = new CreateBalanceHistoryDto(account.CustomerId, account.BankAccountId, input.Balance, input.ActionType);
+            var balanceHistory = _mapper.Map<BalanceHistory>(createBalanceHistory);
+
+            await _context.BalanceHistories.AddAsync(balanceHistory);
+            _context.BankAccounts.Update(account);
+
+            _context.SaveChanges();
+            return _mapper.Map<BankAccountDto>(account);
+        }
+
+        public async Task<string> CheckEnoughBalance(UpdateBalanceByCustomerDto input)
+        {
+            var card = await _context.BankCards.FirstOrDefaultAsync(x => x.BankCardNumber == input.BankCardNumber);
+            var account = await _context.BankAccounts.FirstOrDefaultAsync(x => x.BankAccountId == card.BankAccountId);
+
+            if (input.Balance > account.Balance - 1000)
+                return SBankAccountMessage.InsufficientBalanceFail;
+            else
+                return string.Empty;
         }
         #endregion
     }

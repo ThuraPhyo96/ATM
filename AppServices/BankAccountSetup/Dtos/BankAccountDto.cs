@@ -39,7 +39,7 @@ namespace ATM.AppServices.BankAccountSetup.Dtos
         [StringLength(MaxLength.Max_500)]
         public string Remark { get; set; }
 
-        public IReadOnlyList<BankCardDto> BankCards { get; set; } = new List<BankCardDto>();   
+        public IReadOnlyList<BankCardDto> BankCards { get; set; } = new List<BankCardDto>();
     }
 
     public class CreateBankAccountDto : CreatedUser
@@ -105,4 +105,12 @@ namespace ATM.AppServices.BankAccountSetup.Dtos
         public int AccountType { get; set; } = 0;
     }
 
+    public class UpdateBalanceByCustomerDto : UpdatedUser
+    {
+        public string BankCardNumber { get; set; }
+        public int ActionType { get; set; }
+
+        [Display(Name = "Amount")]
+        public decimal Balance { get; set; }
+    }
 }

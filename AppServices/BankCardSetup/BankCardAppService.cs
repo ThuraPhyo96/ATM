@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace ATM.AppServices.BankCardSetup
@@ -98,12 +99,23 @@ namespace ATM.AppServices.BankCardSetup
             return _mapper.Map<BankCardDto>(obj);
         }
 
-        public async Task<string> CheckDuplicateOnCreate(string cardNumber)
+        public async Task<string> CheckDuplicateOnCreate(int cid, int accountid, string cardNumber)
         {
-            if (await _context.BankCards.AnyAsync(x => x.BankCardNumber == cardNumber))
+            if (await _context.BankCards.AnyAsync(x => x.CustomerId == cid && x.BankAccountId == accountid && x.BankCardNumber == cardNumber))
                 return SBankCardMessage.DuplicatedCardNumber;
             else
                 return string.Empty;
+        }
+
+        public async Task<string> CheckValidCardNumber(CheckBankCardDto input)
+        {
+            if (await _context.BankCards.AnyAsync(x => x.Customer.CustomerGuid.ToString().Equals(input.CustomerGuid) &&
+            x.BankAccount.BankAccountGuid.ToString().Equals(input.BankAccountGuid) &&
+            x.BankCardNumber == input.BankCardNumber &&
+            x.PIN == input.PIN))
+                return string.Empty;
+            else
+                return SBankCardMessage.ValidCard;
         }
         #endregion
 

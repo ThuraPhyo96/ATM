@@ -70,7 +70,7 @@ namespace ATM.Controllers
                 if (loginUser == null)
                     return View();
 
-                string message = await _bankCardAppService.CheckDuplicateOnCreate(input.BankCardNumber);
+                string message = await _bankCardAppService.CheckDuplicateOnCreate(input.CustomerId, input.BankAccountId, input.BankCardNumber);
                 if (!string.IsNullOrEmpty(message))
                 {
                     TempData[SMessage.SuccessMessage] = SBankCardMessage.DuplicatedCardNumber;

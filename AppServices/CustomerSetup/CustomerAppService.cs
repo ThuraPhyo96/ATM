@@ -89,6 +89,22 @@ namespace ATM.AppServices.CustomerSetup
                 Value = c.CustomerGuid.ToString()
             }).ToList();
         }
+
+        public async Task<CustomerDto> GetDetailByLoginUserId(string loginUserId)
+        {
+            if (!await _context.Customers.AnyAsync(x => x.LoginUserId == loginUserId))
+            {
+                return new CustomerDto();
+            }
+
+            var existingObj = await _context.Customers
+                .AsNoTracking()
+                .Include(x => x.LoginUser)
+                .Include(x => x.BankAccounts).ThenInclude(x => x.BankCards)
+                .Include(x => x.BalanceHistories)
+                .FirstOrDefaultAsync(x => x.LoginUserId == loginUserId);
+            return _mapper.Map<CustomerDto>(existingObj);
+        }
         #endregion
 
         #region Create

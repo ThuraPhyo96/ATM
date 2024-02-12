@@ -42,6 +42,7 @@
         public const string UpdateBalanceSuccess = "Balance has been successfully updated.";
         public const string UpdateBalanceFail = "Error: Update Balance failed!";
         public const string AccountTypes = "AccountTypes";
+        public const string InsufficientBalanceFail = "Error: Insufficient Balance!";
 
         public const string DuplicatedAccount = "Error: Account number already exist and does not allow duplication!";
     }
@@ -57,5 +58,6 @@
         public const string BankAccounts = "BankAccounts";
 
         public const string DuplicatedCardNumber = "Error: Bank card number already exist and does not allow duplication!";
+        public const string ValidCard = "Error: Invalid card!";
     }
 }

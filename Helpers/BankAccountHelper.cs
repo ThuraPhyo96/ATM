@@ -13,6 +13,6 @@ namespace ATM.Helpers
                 (int)EBankAccountType.Special => EnumHelper.GetDescription(EBankAccountType.Special),
                 _ => "Empty",
             };
-        }
+        } 
     }
 }
