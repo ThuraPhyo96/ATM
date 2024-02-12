@@ -1,4 +1,5 @@
-﻿using ATM.AppServices.CustomerSetup.Dtos;
+﻿using ATM.AppServices.BalanceHistorySetup.Dtos;
+using ATM.AppServices.CustomerSetup.Dtos;
 using ATM.Data;
 using ATM.Helpers;
 using AutoMapper;
@@ -104,6 +105,29 @@ namespace ATM.AppServices.CustomerSetup
                 .Include(x => x.BalanceHistories)
                 .FirstOrDefaultAsync(x => x.LoginUserId == loginUserId);
             return _mapper.Map<CustomerDto>(existingObj);
+        }
+
+        public IReadOnlyList<DashboardItemDto> GetAll()
+        {
+            DateTime today = DateTime.Today;    
+            DateTime lastSevenDay = today.AddDays(-7);
+
+            var objs = _context.Customers
+                .AsNoTracking()
+                .OrderBy(x => x.FirstName)
+                .AsQueryable();
+
+            List<CustomerDto> customers = _mapper.Map<List<CustomerDto>>(objs);
+            decimal todayCount = customers.Where(x => x.CreationTime.Value.ToString("dd-MM-yyyy") == today.ToString("dd-MM-yyyy")).Count();
+            decimal lastSevenDayCount  = customers.Where(x => x.CreationTime >= lastSevenDay && x.CreationTime < today).Count();
+            decimal currentMonthAmount = customers.Where(x => x.CreationTime.Value.Month == today.Month).Count();
+
+            return new List<DashboardItemDto>()
+            {
+                new DashboardItemDto("Today", todayCount),
+                new DashboardItemDto("Last 7 Days", lastSevenDayCount),
+                new DashboardItemDto("This Month", currentMonthAmount)
+            };
         }
         #endregion
 

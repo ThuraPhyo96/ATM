@@ -1,48 +1,56 @@
 ﻿@using ATM.Helpers
 @model ATM.AppServices.BankAccountSetup.Dtos.BankAccountDto
 
-<form>
-    <div class="form-group">
+<div class="card" style="margin-top:15px;">
+    <div class="card-body">
         <div class="row">
-            <div class="col-4 col-md-4 col-sm-12">
-                <label asp-for="@Model.Customer.FirstName" class="control-label"></label>
-            </div>
-            <div class="col-8 col-md-8 col-sm-12">
-                @Model.Customer.FirstName
-            </div>
-        </div>
-    </div>
+            <div class="col-md-8">
+                <form>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-4 col-md-4 col-sm-12">
+                                <label asp-for="@Model.Customer.FirstName" class="control-label"></label>
+                            </div>
+                            <div class="col-8 col-md-8 col-sm-12">
+                                @Model.Customer.FirstName
+                            </div>
+                        </div>
+                    </div>
 
-    <div class="form-group">
-        <div class="row">
-            <div class="col-4 col-md-4 col-sm-12">
-                <label asp-for="AccountNumber" class="control-label"></label>
-            </div>
-            <div class="col-8 col-md-8 col-sm-12">
-                @Model.AccountNumber
-            </div>
-        </div>
-    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-4 col-md-4 col-sm-12">
+                                <label asp-for="AccountNumber" class="control-label"></label>
+                            </div>
+                            <div class="col-8 col-md-8 col-sm-12">
+                                @Model.AccountNumber
+                            </div>
+                        </div>
+                    </div>
 
-    <div class="form-group">
-        <div class="row">
-            <div class="col-4 col-md-4 col-sm-12">
-                <label asp-for="AccountType" class="control-label"></label>
-            </div>
-            <div class="col-8 col-md-8 col-sm-12">
-                @Html.Raw(BankAccountHelper.GetAccountType(Model.AccountType))
-            </div>
-        </div>
-    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-4 col-md-4 col-sm-12">
+                                <label asp-for="AccountType" class="control-label"></label>
+                            </div>
+                            <div class="col-8 col-md-8 col-sm-12">
+                                @Html.Raw(BankAccountHelper.GetAccountType(Model.AccountType))
+                            </div>
+                        </div>
+                    </div>
 
-    <div class="form-group">
-        <div class="row">
-            <div class="col-4 col-md-4 col-sm-12">
-                <label asp-for="Balance" class="control-label"></label>
-            </div>
-            <div class="col-8 col-md-8 col-sm-12">
-                @Model.Balance.ToString("#,#00.00")
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-4 col-md-4 col-sm-12">
+                                <label asp-for="Balance" class="control-label"></label>
+                            </div>
+                            <div class="col-8 col-md-8 col-sm-12">
+                                @Model.Balance.ToString("#,#00.00")
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-</form>
+</div>

@@ -241,59 +241,5 @@ namespace ATM.Controllers
 
             return View(result);
         }
-
-
-        //#region Bank Card
-        //[HttpPost]
-        //public async Task<ActionResult> CreateBankCardModal(string guid)
-        //{
-        //    CustomerDto result = await _customerAppService.GetDetailByGuid(guid);
-
-        //    CreateBankCardDto bankCard = new CreateBankCardDto()
-        //    {
-        //        CustomerId = result.CustomerId
-        //    };
-
-        //    return PartialView("_CreateBankCardModal", bankCard);
-        //}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> CreateBankCard(CreateBankCardDto input)
-        //{
-        //    try
-        //    {
-        //        var loginUser = await _userManager.GetUserAsync(User);
-        //        if (loginUser == null)
-        //            return View();
-
-        //        string message = await _bankCardAppService.CheckDuplicateOnCreate(input.BankCardNumber);
-        //        if (!string.IsNullOrEmpty(message))
-        //        {
-        //            TempData[SMessage.SuccessMessage] = SBankCardMessage.DuplicatedCardNumber;
-        //            return View();
-        //        }
-
-        //        input.CreatedUserId = loginUser.Id;
-        //        var bankCard = await _bankCardAppService.CreateBankCard(input);
-
-        //        if (bankCard.BankCardId != 0)
-        //            TempData[SMessage.SuccessMessage] = SBankCardMessage.CreateSuccess;
-        //        else
-        //            TempData[SMessage.SuccessMessage] = SBankCardMessage.CreateFail;
-
-        //        return RedirectToAction(nameof(Detail), new { guid = input.CustomerGuid });
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
-
-        //public void GetBankCardDropdownItems(string guid)
-        //{
-        //    ViewData[SBankCardMessage.BankAccounts] = _bankAccountAppService.GetBankAccountByCustomerId(guid);
-        //}
-        //#endregion
     }
 }

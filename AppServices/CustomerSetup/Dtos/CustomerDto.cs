@@ -7,6 +7,8 @@ using System;
 using ATM.AppServices.Authentication;
 using ATM.AppServices.Authentication.Dtos;
 using ATM.AppServices.BankAccountSetup.Dtos;
+using ATM.AppServices.BalanceHistorySetup.Dtos;
+using System.Threading;
 
 namespace ATM.AppServices.CustomerSetup.Dtos
 {
@@ -65,6 +67,8 @@ namespace ATM.AppServices.CustomerSetup.Dtos
         public IReadOnlyList<BankAccountDto> BankAccounts { get; set; } = new List<BankAccountDto>();
 
         public CreateBankAccountDto CreateBankAccount { get; set; }
+
+        public IReadOnlyList<BalanceHistoryDto> BalanceHistories { get; set; } = new List<BalanceHistoryDto>();
     }
 
     public class CreateCustomerDto : CreatedUser
@@ -173,6 +177,31 @@ namespace ATM.AppServices.CustomerSetup.Dtos
             CustomerId = customerId;
             LoginUserId = loginUserId;
             UpdatedUserId = updatedUserId;
+        }
+    }
+
+    public class DashboardDto
+    {
+        public CustomerDto Customer { get; set; }
+        public IReadOnlyList<DashboardItemDto> Customers { get; set; } = new List<DashboardItemDto>();
+        public IReadOnlyList<DashboardItemDto> Withdraws { get; set; } = new List<DashboardItemDto>();
+        public IReadOnlyList<DashboardItemDto> Deposits { get; set; } = new List<DashboardItemDto>();
+    }
+
+    public class DashboardItemDto
+    {
+        public string Label { get; set; }
+        public decimal Amount { get; set; }
+
+        public DashboardItemDto()
+        {
+
+        }
+
+        public DashboardItemDto(string label, decimal amunt)
+        {
+            Label = label;
+            Amount = amunt;
         }
     }
 }

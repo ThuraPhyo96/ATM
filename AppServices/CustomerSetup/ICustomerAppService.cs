@@ -12,6 +12,7 @@ namespace ATM.AppServices.CustomerSetup
         List<CustomerDto> GetAll(SearchCustomerDto input);
         IReadOnlyList<SelectListItem> GetAllCustomers();
         Task<CustomerDto> GetDetailByLoginUserId(string loginUserId);
+        IReadOnlyList<DashboardItemDto> GetAll();
 
         Task<CustomerDto> CreateCustomer(CreateCustomerDto input);
         Task<string> CheckDuplicateOnCreate(string nric);

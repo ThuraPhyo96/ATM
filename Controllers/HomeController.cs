@@ -1,4 +1,5 @@
-﻿using ATM.AppServices.CustomerSetup;
+﻿using ATM.AppServices.BalanceHistorySetup;
+using ATM.AppServices.CustomerSetup;
 using ATM.AppServices.CustomerSetup.Dtos;
 using ATM.Areas.Identity.Data;
 using ATM.Helpers;
@@ -24,19 +25,23 @@ namespace ATM.Controllers
         private readonly IAuthorizationService _authorizationService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ICustomerAppService _customerAppService;
+        private readonly IBalanceHistoryAppService _balanceHistoryAppService;
 
         public HomeController(ILogger<HomeController> logger, IAuthorizationService authorizationService,
             UserManager<ApplicationUser> userManager,
-             ICustomerAppService customerAppService)
+             ICustomerAppService customerAppService,
+             IBalanceHistoryAppService balanceHistoryAppService)
         {
             _logger = logger;
             _authorizationService = authorizationService;
             _userManager = userManager;
             _customerAppService = customerAppService;
+            _balanceHistoryAppService = balanceHistoryAppService;
         }
 
         public async Task<IActionResult> Index()
         {
+            DashboardDto dashboard = new DashboardDto();
             CustomerDto customer = new CustomerDto();
             string roleName = string.Empty;
             var currentUser = await _userManager.GetUserAsync(User);
@@ -44,6 +49,9 @@ namespace ATM.Controllers
             if (User.IsInRole(RoleNames.SuperAdmin))
             {
                 roleName = RoleNames.SuperAdmin;
+                dashboard.Customers = _customerAppService.GetAll();
+                dashboard.Withdraws = _balanceHistoryAppService.GetAllWithdraw();
+                dashboard.Deposits = _balanceHistoryAppService.GetAllDeposit();
             }
 
             if (User.IsInRole(RoleNames.Customer))
@@ -53,7 +61,9 @@ namespace ATM.Controllers
             }
 
             ViewBag.RoleName = roleName;
-            return View(customer);
+            dashboard.Customer = customer;
+
+            return View(dashboard);
         }
 
         public IActionResult Privacy()

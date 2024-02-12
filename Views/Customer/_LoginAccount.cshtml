@@ -1,30 +1,31 @@
 ﻿@model ATM.AppServices.CustomerSetup.Dtos.CustomerDto
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="CreateLoginAccount" asp-controller="Customer" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="CustomerGuid">
-            @if (Model.LoginUser != null)
-            {
-                <div class="form-group">
-                    <label class="control-label">User Name</label>
-                    <input name="UserName" value="@Model.LoginUser.UserName" class="form-control" readonly />
-                </div>
-                <div class="form-group">
-                    <label asp-for="@Model.LoginUser.IsActive" class="control-label"></label><br />
-                    <input asp-for="IsActive" disabled/>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Update" class="btn btn-primary" />
-                </div>
-            }
-            else
-            {
-                <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-primary" />
-                </div>
-            }
-        </form>
+<div class="card" style="margin-top: 15px;">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <form asp-action="CreateLoginAccount" asp-controller="Customer" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="CustomerGuid">
+                    @if (Model.LoginUser != null)
+                    {
+                        <div class="form-group">
+                            <label class="control-label">User Name</label>
+                            <input name="UserName" value="@Model.LoginUser.UserName" class="form-control" readonly />
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.LoginUser.IsActive" class="control-label"></label><br />
+                            <input asp-for="IsActive" disabled />
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="form-group">
+                            <input type="submit" value="Create" class="btn btn-primary" />
+                        </div>
+                    }
+                </form>
+            </div>
+        </div>
     </div>
 </div>

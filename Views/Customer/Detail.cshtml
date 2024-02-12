@@ -37,7 +37,13 @@
     <div class="tab-pane fade" id="nav-bank-account" role="tabpanel" aria-labelledby="nav-bank-account-tab">
         @await Html.PartialAsync("_BankAccount", Model)
     </div>
-    <div class="tab-pane fade" id="nav-history" role="tabpanel" aria-labelledby="nav-history-tab">...</div>
+    <div class="tab-pane fade" id="nav-history" role="tabpanel" aria-labelledby="nav-history-tab">
+        <div class="card" style="margin-top: 15px;">
+            <div class="card-body">
+                @await Html.PartialAsync("~/Views/BalanceHistory/_BalanceHistory.cshtml", Model.BalanceHistories)
+            </div>
+        </div>
+    </div>
     <div class="tab-pane fade" id="nav-login-account" role="tabpanel" aria-labelledby="nav-login-account-tab">
         @await Html.PartialAsync("_LoginAccount", Model)
     </div>
@@ -57,6 +63,10 @@
 
     <script type="text/javascript">
         $('#bankAccountTable').DataTable({
+            order: [[0, 'asc']]
+        });
+
+        $('#balanceHistoryTable').DataTable({
             order: [[0, 'asc']]
         });
 

@@ -5,44 +5,51 @@
     ViewData["Title"] = "Customer Detail";
 }
 
-<p>
-    <button onclick="createBankAccount()" class="btn btn-primary">Create New</button>
-</p>
-
-<div class="row">
-    <div class="col-sm-12 col-md-12 col-lg-12">
-        <div>
-            <table id="bankAccountTable" class="table table-striped table-bordered" style="width:100%">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Account Number</th>
-                        <th>Account Type</th>
-                        <th>Balance</th>
-                        <th>Audit Info</th>
-                        <th class="text-center">Enables?</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.BankAccounts)
-                    {
-                        <tr>
-                            <td>
-                                <a asp-action="Detail" asp-controller="BankAccount" asp-route-guid="@item.BankAccountGuid.ToString()" title="Detail">
-                                    <i class="fa fa-pencil-square fa-lg"></i>
-                                </a>
-                            </td>
-                            <td>@item.AccountNumber</td>
-                            <td>@Html.Raw(BankAccountHelper.GetAccountType(item.AccountType))</td>
-                            <td>@item.Balance.ToString("#,#00.00")</td>
-                            <td>
-                                @Html.Raw(CustomerHelper.GetUpdatedUserInfo(@item.UpdatedTime))
-                            </td>
-                            <td class="text-center"><input type="checkbox" @(item.IsActive ? "checked" : "") /></td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+<div class="card" style="margin-top: 15px;">
+    <div class="card-body">
+        <div class="row" style="margin-bottom: 15px;">
+            <div class="col-2">
+            </div>
+            <div class="col-10">
+                <div class="text-right"> <button onclick="createBankAccount()" class="btn btn-primary">Create New</button></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <div>
+                    <table id="bankAccountTable" class="table table-striped table-bordered" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Account Number</th>
+                                <th>Account Type</th>
+                                <th>Balance</th>
+                                <th>Audit Info</th>
+                                <th class="text-center">Enables?</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.BankAccounts)
+                            {
+                                <tr>
+                                    <td>
+                                        <a asp-action="Detail" asp-controller="BankAccount" asp-route-guid="@item.BankAccountGuid.ToString()" title="Detail">
+                                            <i class="fa fa-pencil-square fa-lg"></i>
+                                        </a>
+                                    </td>
+                                    <td>@item.AccountNumber</td>
+                                    <td>@Html.Raw(BankAccountHelper.GetAccountType(item.AccountType))</td>
+                                    <td>@item.Balance.ToString("#,#00.00")</td>
+                                    <td>
+                                        @Html.Raw(CustomerHelper.GetUpdatedUserInfo(@item.UpdatedTime))
+                                    </td>
+                                    <td class="text-center"><input type="checkbox" @(item.IsActive ? "checked" : "") /></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>

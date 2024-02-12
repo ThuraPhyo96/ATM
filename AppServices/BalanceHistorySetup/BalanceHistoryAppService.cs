@@ -1,5 +1,6 @@
 ﻿using ATM.AppServices.BalanceHistorySetup.Dtos;
 using ATM.AppServices.BankCardSetup.Dtos;
+using ATM.AppServices.CustomerSetup.Dtos;
 using ATM.Data;
 using ATM.Helpers;
 using AutoMapper;
@@ -51,6 +52,54 @@ namespace ATM.AppServices.BalanceHistorySetup
                 .AsQueryable();
 
             return _mapper.Map<List<BalanceHistoryDto>>(objs);
+        }
+
+        public IReadOnlyList<DashboardItemDto> GetAllWithdraw()
+        {
+            DateTime today = DateTime.Today;
+            DateTime lastSevenDay = DateTime.Today.AddDays(-7);
+
+            var objs = _context.BalanceHistories
+                .AsNoTracking()
+                .Where(x => x.HistoryType == (int)EBalanceHistoryType.Withdraw)
+                .OrderByDescending(x => x.CreationTime).ThenByDescending(x => x.TransactionDate)
+                .AsQueryable();
+
+            var allWithdraw = _mapper.Map<List<BalanceHistoryDto>>(objs);
+            decimal todayAmount = allWithdraw.Where(x => x.TransactionDate == today).Sum(x => x.Amount);
+            decimal lastSevenDayAmount = allWithdraw.Where(x => x.TransactionDate >= lastSevenDay && x.TransactionDate < today).Sum(x => x.Amount);
+            decimal currentMonthAmount = allWithdraw.Where(x => x.TransactionDate.Month == today.Month).Sum(x => x.Amount);
+
+            return new List<DashboardItemDto>()
+            {
+                new DashboardItemDto("Today", todayAmount),
+                new DashboardItemDto("Last 7 Days", lastSevenDayAmount),
+                new DashboardItemDto("This Month", todayAmount)
+            };
+        }
+
+        public IReadOnlyList<DashboardItemDto> GetAllDeposit()
+        {
+            DateTime today = DateTime.Today;
+            DateTime lastSevenDay = DateTime.Today.AddDays(-7);
+
+            var objs = _context.BalanceHistories
+                .AsNoTracking()
+                .Where(x => x.HistoryType == (int)EBalanceHistoryType.Deposite)
+                .OrderByDescending(x => x.CreationTime).ThenByDescending(x => x.TransactionDate)
+                .AsQueryable();
+
+            var allWithdraw = _mapper.Map<List<BalanceHistoryDto>>(objs);
+            decimal todayAmount = allWithdraw.Where(x => x.TransactionDate == today).Sum(x => x.Amount);
+            decimal lastSevenDayAmount = allWithdraw.Where(x => x.TransactionDate >= lastSevenDay && x.TransactionDate < today).Sum(x => x.Amount);
+            decimal currentMonthAmount = allWithdraw.Where(x => x.TransactionDate.Month == today.Month).Sum(x => x.Amount);
+
+            return new List<DashboardItemDto>()
+            {
+                new DashboardItemDto("Today", todayAmount),
+                new DashboardItemDto("Last 7 Days", lastSevenDayAmount),
+                new DashboardItemDto("This Month", todayAmount)
+            };
         }
         #endregion
     }
