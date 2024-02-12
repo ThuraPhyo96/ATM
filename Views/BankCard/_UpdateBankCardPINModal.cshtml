@@ -1,0 +1,70 @@
+﻿@model ATM.AppServices.BankCardSetup.Dtos.UpdateBankCardPINDto
+@{
+    Layout = null;
+    ViewData["Title"] = "Update PIN";
+}
+
+<div class="modal-header">
+    <h5 class="modal-title">@ViewData["Title"]</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <form asp-action="UpdateBankCardPIN" asp-controller="BankCard" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="BankCardId" />
+        <input type="hidden" asp-for="BankAccountGuid" />
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-4 col-md-4 col-sm-12">
+                    <label asp-for="PIN" class="control-label"></label>
+                </div>
+                <div class="col-8 col-md-8 col-sm-12">
+                    <input asp-for="PIN" class="form-control" />
+                    <span asp-validation-for="PIN" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-4 col-md-4 col-sm-12">
+                    <label asp-for="NewPIN" class="control-label"></label>
+                </div>
+                <div class="col-8 col-md-8 col-sm-12">
+                    <input asp-for="NewPIN" class="form-control" />
+                    <span asp-validation-for="NewPIN" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-4 col-md-4 col-sm-12">
+                    <label asp-for="ConfirmPIN" class="control-label"></label>
+                </div>
+                <div class="col-8 col-md-8 col-sm-12">
+                    <input asp-for="ConfirmPIN" class="form-control" />
+                    <span asp-validation-for="ConfirmPIN" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-12 col-md-12 col-sm-12 text-right">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input type="submit" value="Update" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

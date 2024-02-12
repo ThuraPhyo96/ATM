@@ -1,4 +1,19 @@
-﻿@using ATM.Helpers
+﻿@using ATM.Areas.Identity.Data
+@using ATM.Helpers
+@using Microsoft.AspNetCore.Identity
+@using ATM.AppServices.CustomerSetup.Dtos
+
+@inject ATM.AppServices.CustomerSetup.ICustomerAppService _customerAppService
+@inject UserManager<ApplicationUser> _userManager
+
+@{
+    CustomerDto customer = new CustomerDto();
+    if (User.IsInRole(RoleNames.Customer))
+    {
+        var currentUser = await _userManager.GetUserAsync(User);
+        customer = await _customerAppService.GetDetailByLoginUserId(currentUser.Id);
+    }
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -41,9 +56,12 @@
                         @if (User.IsInRole(RoleNames.Customer))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="BankCard" asp-action="Index">Profile</a>
+                                <a class="nav-link text-dark" asp-controller="Customer" asp-action="Profile" asp-route-guid="@customer.CustomerGuid.ToString()">Profile</a>
                             </li>
                         }
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/ChangePassword">Change Password</a>
+                        </li>
                     </ul>
                     <form class="form-inline my-2 my-lg-0" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home")" method="post">
                         <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>

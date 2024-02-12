@@ -122,12 +122,27 @@ namespace ATM.AppServices.BankCardSetup
         #region Update
         public async Task<BankCardDto> UpdateBankCard(UpdateBankCardDto input)
         {
-            if (!await _context.BankCards.AnyAsync(x => x.BankAccountId == input.BankCardId))
+            if (!await _context.BankCards.AnyAsync(x => x.BankCardId == input.BankCardId))
             {
                 return new BankCardDto();
             }
 
-            var existingObj = await _context.BankCards.FirstOrDefaultAsync(x => x.BankAccountId == input.BankCardId);
+            var existingObj = await _context.BankCards.FirstOrDefaultAsync(x => x.BankCardId == input.BankCardId);
+            _mapper.Map(input, existingObj);
+            _context.BankCards.Update(existingObj);
+            _context.SaveChanges();
+            return _mapper.Map<BankCardDto>(existingObj);
+        }
+
+        public async Task<BankCardDto> UpdateBankCardPIN(UpdateBankCardPINDto input)
+        {
+            if (!await _context.BankCards.AnyAsync(x => x.BankCardId == input.BankCardId))
+            {
+                return new BankCardDto();
+            }
+
+            var existingObj = await _context.BankCards.FirstOrDefaultAsync(x => x.BankCardId == input.BankCardId);
+            input.PIN = input.NewPIN;
             _mapper.Map(input, existingObj);
             _context.BankCards.Update(existingObj);
             _context.SaveChanges();

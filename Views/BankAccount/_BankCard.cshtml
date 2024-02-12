@@ -3,11 +3,15 @@
 
 @{
     ViewData["Title"] = "Bank Card Detail";
+    string roleName = (ViewBag.RoleName ?? string.Empty) as string;
 }
 
-<p>
-    <button onclick="createBankCard()" class="btn btn-primary">Create New</button>
-</p>
+@if (roleName == RoleNames.SuperAdmin)
+{
+    <p>
+        <button onclick="createBankCard()" class="btn btn-primary">Create New</button>
+    </p>
+}
 
 <div class="row">
     <div class="col-sm-12 col-md-12 col-lg-12">
@@ -29,9 +33,23 @@
                     {
                         <tr>
                             <td>
+                                @if (roleName == RoleNames.SuperAdmin)
+                                {
+                                    <a href="#" onclick="updateBankCard('@item.BankCardGuid.ToString()')" title="Update" style="color: #3399ff">
+                                        <i class="fa fa-pencil-square fa-lg"></i>
+                                    </a>
+                                }
                             </td>
                             <td>@item.BankCardNumber</td>
-                            <td>@item.PIN</td>
+                            <td>
+                                @item.PIN &ensp;
+                                @if (roleName == RoleNames.Customer)
+                                {
+                                    <a href="#" onclick="updateBankCardPIN('@item.BankCardGuid.ToString()')" title="Update PIN" style="color: #3399ff">
+                                        <i class="fa fa-key fa-lg"></i>
+                                    </a>
+                                }
+                            </td>
                             <td>@item.CreationTime.Value.ToString("dd-MMM-yyyy")</td>
                             <td>@item.ValidDate.ToString("dd-MMM-yyyy")</td>
                             <td>

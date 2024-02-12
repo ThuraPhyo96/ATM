@@ -18,7 +18,6 @@
     }
 </p>
 
-
 @if (roleName == RoleNames.SuperAdmin)
 {
     <div class="text-center">
@@ -33,8 +32,8 @@ else if (roleName == RoleNames.Customer)
     {
         <div class="card">
             <div class="card-header">
-                @Html.Raw(CustomerHelper.GetAccountType(item.AccountType))<br />
-                @item.AccountNumber
+                        @Html.Raw(CustomerHelper.GetAccountType(item.AccountType))<br />
+                        <a asp-action="Detail" asp-controller="BankAccount" asp-route-guid="@item.BankAccountGuid.ToString()">@item.AccountNumber</a>
             </div>
             <div class="card-body">
                 <h5 class="card-title text-right">Available Balance</h5>

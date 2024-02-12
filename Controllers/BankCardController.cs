@@ -94,19 +94,41 @@ namespace ATM.Controllers
         }
 
         // GET: BankCardController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> UpdateBankCardModal(string guid)
         {
-            return View();
+            var bankCard = await _bankCardAppService.GetDetailByGuid(guid);
+            UpdateBankCardDto updateBankCardDto = new UpdateBankCardDto()
+            {
+                BankCardId = bankCard.BankCardId,
+                BankAccountGuid = bankCard.BankAccount.BankAccountGuid.ToString(),
+                ValidDate = bankCard.ValidDate
+            };
+            return PartialView("~/Views/BankCard/_UpdateBankCardModal.cshtml", updateBankCardDto);
         }
 
         // POST: BankCardController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> UpdateBankCard(UpdateBankCardDto input)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                var loginUser = await _userManager.GetUserAsync(User);
+                if (loginUser == null)
+                    return View();
+
+                input.UpdatedUserId = loginUser.Id;
+                var bankCard = await _bankCardAppService.UpdateBankCard(input);
+
+                if (bankCard.BankCardId != 0)
+                    TempData[SMessage.SuccessMessage] = SBankCardMessage.UpdateSuccess;
+                else
+                    TempData[SMessage.SuccessMessage] = SBankCardMessage.UpdateFail;
+
+                if (User.IsInRole(RoleNames.Customer))
+                    return Redirect(Url.Action("Index", "Home"));
+                else
+                    return Redirect(Url.Action("Detail", "BankAccount", new { guid = input.BankAccountGuid }));
             }
             catch
             {
@@ -114,20 +136,41 @@ namespace ATM.Controllers
             }
         }
 
-        // GET: BankCardController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> UpdateBankCardPINModal(string guid)
         {
-            return View();
+            var bankCard = await _bankCardAppService.GetDetailByGuid(guid);
+            UpdateBankCardPINDto updateBankCardPIN = new UpdateBankCardPINDto()
+            {
+                BankCardId = bankCard.BankCardId,
+                BankAccountGuid = bankCard.BankAccount.BankAccountGuid.ToString(),
+                PIN = bankCard.PIN
+            };
+            return PartialView("~/Views/BankCard/_UpdateBankCardPINModal.cshtml", updateBankCardPIN);
         }
 
-        // POST: BankCardController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> UpdateBankCardPIN(UpdateBankCardPINDto input)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                var loginUser = await _userManager.GetUserAsync(User);
+                if (loginUser == null)
+                    return View();
+
+                input.UpdatedUserId = loginUser.Id;
+                var bankCard = await _bankCardAppService.UpdateBankCardPIN(input);
+
+                if (bankCard.BankCardId != 0)
+                    TempData[SMessage.SuccessMessage] = SBankCardMessage.UpdatePin;
+                else
+                    TempData[SMessage.SuccessMessage] = SBankCardMessage.UpdatePinFail;
+
+                string backUrl = Url.Action("Detail", "BankAccount", new { guid = input.BankAccountGuid });
+                if (User.IsInRole(RoleNames.Customer))
+                    return Redirect(Url.Action("Index", "Home"));
+                else
+                    return Redirect(Url.Action("Detail", "BankAccount", new { guid = input.BankAccountGuid }));
             }
             catch
             {

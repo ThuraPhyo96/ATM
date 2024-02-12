@@ -13,5 +13,6 @@ namespace ATM.AppServices.BankCardSetup
         Task<string> CheckDuplicateOnCreate(int cid, int accountid, string cardNumber);
         Task<BankCardDto> UpdateBankCard(UpdateBankCardDto input);
         Task<string> CheckValidCardNumber(CheckBankCardDto input);
+        Task<BankCardDto> UpdateBankCardPIN(UpdateBankCardPINDto input);
     }
 }

@@ -4,11 +4,13 @@
 @{
     ViewData["Title"] = "Bank Account Detail";
     string statusMessage = (TempData[SMessage.SuccessMessage] ?? string.Empty) as string;
+    string roleName = (ViewBag.RoleName ?? string.Empty) as string;
+    string backUrl = (ViewBag.BackUrl ?? string.Empty) as string;
 }
 
 <div class="row">
     <div class="col-2">
-        <a asp-action="Detail" asp-controller="Customer" asp-route-guid="@Model.Customer.CustomerGuid.ToString()" class="btn btn-primary">Back</a>
+        <a href="@backUrl" class="btn btn-primary">Back</a>
     </div>
     <div class="col-10">
         <div class="text-center"> <h3>@ViewData["Title"]</h3></div>
@@ -31,96 +33,14 @@
 <div class="tab-content" id="nav-tabContent">
     <div class="tab-pane fade show active" id="nav-account" role="tabpanel" aria-labelledby="nav-account-tab">
         <input type="hidden" id="CustomerGuid" name="CustomerGuid" value="@Model.Customer.CustomerGuid.ToString()">
-
-        <form asp-action="Edit" asp-controller="BankAccount" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-            <input type="hidden" asp-for="BankAccountId">
-            <input type="hidden" asp-for="BankAccountGuid">
-
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-4 col-md-4 col-sm-12">
-                        <label asp-for="@Model.Customer.CustomerGuid" class="control-label"></label>
-                    </div>
-                    <div class="col-8 col-md-8 col-sm-12">
-                        <select asp-for="@Model.Customer.CustomerGuid" class="select2 form-control" asp-items="@ViewBag.Customers" style="width: 100%" disabled>
-                            <option value="">Select customer type</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-4 col-md-4 col-sm-12">
-                        <label asp-for="AccountNumber" class="control-label"></label>
-                    </div>
-                    <div class="col-8 col-md-8 col-sm-12">
-                        <input asp-for="AccountNumber" class="form-control" readonly />
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-4 col-md-4 col-sm-12">
-                        <label asp-for="AccountType" class="control-label"></label>
-                    </div>
-                    <div class="col-8 col-md-8 col-sm-12">
-                        <select asp-for="AccountType" class="select2 form-control" asp-items="@ViewBag.AccountTypes" style="width: 100%" disabled>
-                            <option value="">Select account type</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-4 col-md-4 col-sm-12">
-                        <label asp-for="Balance" class="control-label"></label>
-                        <a href="#" onclick="updateBalance('@Model.BankAccountGuid.ToString()')" title="Update Balance" style="color: #3399ff">
-                            <i class="fa fa-pencil-square fa-lg"></i>
-                        </a>
-                    </div>
-                    <div class="col-8 col-md-8 col-sm-12">
-                        <input asp-for="Balance" class="form-control" readonly />
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-4 col-md-4 col-sm-12">
-                        <label asp-for="IsActive" class="control-label"></label>
-                    </div>
-                    <div class="col-8 col-md-8 col-sm-12">
-                        <input asp-for="IsActive" />
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-4 col-md-4 col-sm-12">
-                        <label asp-for="Remark" class="control-label"></label>
-                    </div>
-                    <div class="col-8 col-md-8 col-sm-12">
-                        <textarea asp-for="Remark" class="form-control" rows="3"></textarea>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-4 col-md-4 col-sm-12">
-                    </div>
-                    <div class="col-8 col-md-8 col-sm-12">
-                        <input type="submit" value="Update" class="btn btn-primary" />
-                    </div>
-                </div>
-            </div>
-        </form>
+        @if (roleName == RoleNames.SuperAdmin)
+        {
+            @await Html.PartialAsync("_DetailByAdmin", Model)
+        }
+        else if (roleName == RoleNames.Customer)
+        {
+            @await Html.PartialAsync("_DetailByCustomer", Model)
+        }
     </div>
     <div class="tab-pane fade" id="nav-card" role="tabpanel" aria-labelledby="nav-card-tab">
         @await Html.PartialAsync("_BankCard", Model.BankCards)
@@ -135,6 +55,20 @@
 </div>
 
 <div class="modal fade" id="createBankCard" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="updateBankCardModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="updateBankCardPINModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
         </div>
@@ -177,6 +111,36 @@
                 success: function (response) {
                     $('#createBankCard div.modal-content').html(response);
                     $("#createBankCard").modal('show');
+                },
+                error: function (request, status, error) {
+                    alert(request.responseText);
+                }
+            });
+        }
+
+        function updateBankCard(guid) {
+            $.ajax({
+                url: "/BankCard/UpdateBankCardModal",
+                type: "POST",
+                data: { guid: guid },
+                success: function (response) {
+                    $('#updateBankCardModal div.modal-content').html(response);
+                    $("#updateBankCardModal").modal('show');
+                },
+                error: function (request, status, error) {
+                    alert(request.responseText);
+                }
+            });
+        }
+
+        function updateBankCardPIN(guid) {
+            $.ajax({
+                url: "/BankCard/UpdateBankCardPINModal",
+                type: "POST",
+                data: { guid: guid },
+                success: function (response) {
+                    $('#updateBankCardPINModal div.modal-content').html(response);
+                    $("#updateBankCardPINModal").modal('show');
                 },
                 error: function (request, status, error) {
                     alert(request.responseText);

@@ -38,7 +38,7 @@ namespace ATM.Controllers
             _userManager = userManager;
             _authenticationAppService = authenticationAppService;
             _bankAccountAppService = bankAccountAppService;
-            _bankCardAppService = bankCardAppService;   
+            _bankCardAppService = bankCardAppService;
         }
 
         // GET: CustomerController
@@ -231,6 +231,17 @@ namespace ATM.Controllers
                 return View();
             }
         }
+
+        public async Task<ActionResult> Profile(string guid)
+        {
+            CustomerDto result = await _customerAppService.GetDetailByGuid(guid);
+
+            if (result == null)
+                return View(SPartialViews.AccessDenied);
+
+            return View(result);
+        }
+
 
         //#region Bank Card
         //[HttpPost]

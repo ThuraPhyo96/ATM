@@ -78,11 +78,12 @@ namespace ATM.AppServices.BankCardSetup.Dtos
     public class UpdateBankCardDto : UpdatedUser
     {
         public int BankCardId { get; set; }
-        public Guid BankCardGuid { get; set; }
+
+        public string BankAccountGuid { get; set; }
 
         [Required]
-        [Display(Name = "PIN")]
-        public string PIN { get; set; }
+        [Display(Name = "Valid Date")]
+        public DateTime ValidDate { get; set; }
 
         [Display(Name = "Enables?")]
         public bool IsActive { get; set; } = true;
@@ -90,6 +91,30 @@ namespace ATM.AppServices.BankCardSetup.Dtos
         [Display(Name = "Remarks")]
         [StringLength(MaxLength.Max_500)]
         public string Remark { get; set; }
+    }
+
+    public class UpdateBankCardPINDto : UpdatedUser
+    {
+        public int BankCardId { get; set; }
+
+        public string BankAccountGuid { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        [Display(Name = "Current PIN")]
+        public string PIN { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        [RegularExpression(@"^[0-9]{1,6}$", ErrorMessage = "PIN must be contain only digit and length must be 6.")]
+        [Display(Name = "New PIN")]
+        public string NewPIN { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm new PIN")]
+        [Compare("NewPIN", ErrorMessage = "The new PIN and confirmation PIN do not match.")]
+        [RegularExpression(@"^[0-9]{1,6}$", ErrorMessage = "PIN must be contain only digit and length must be 6.")]
+        public string ConfirmPIN { get; set; }
     }
 
     public class SearchBankCardDto

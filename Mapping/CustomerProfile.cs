@@ -35,6 +35,7 @@ namespace ATM.Mapping
             // Added by TR on 12-Feb-2024
             CreateMap<BalanceHistoryDto, BalanceHistory>();
             CreateMap<CreateBalanceHistoryDto, BalanceHistory>();
+            CreateMap<UpdateBankCardPINDto, BankCard>();
             #endregion
 
             #region Map To Dto

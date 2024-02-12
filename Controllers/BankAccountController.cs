@@ -11,6 +11,7 @@ using ATM.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 using System;
 using System.Threading.Tasks;
 
@@ -90,12 +91,25 @@ namespace ATM.Controllers
         // GET: BankAccountController/Edit/5
         public async Task<ActionResult> Detail(string guid)
         {
+            string roleName = string.Empty;
+            if (User.IsInRole(RoleNames.SuperAdmin))
+                roleName = RoleNames.SuperAdmin;
+
+            if (User.IsInRole(RoleNames.Customer))
+                roleName = RoleNames.Customer;
+
+            ViewBag.RoleName = roleName;
             GetDropdownItems();
             BankAccountDto result = await _bankAccountAppService.GetDetailByGuid(guid);
 
             if (result == null)
                 return View(SPartialViews.AccessDenied);
 
+            string backUrl = Url.Action("Detail", "Customer", new { guid = result.Customer.CustomerGuid.ToString() });
+            if (User.IsInRole(RoleNames.Customer))
+                backUrl = Url.Action("Index", "Home");
+
+            ViewBag.BackUrl = backUrl;
             return View(result);
         }
 
